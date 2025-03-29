@@ -1,0 +1,38 @@
+* {
+  margin: 0;
+  padding: 0;
+  max-height: 100%;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  overflow: hidden;
+}
+
+.page {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
+
+.page-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.page-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 1.5vw;
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  color: white;
+  margin-top: 4.5vw;
+  margin-left: 2.5vw;
+  margin-right: 30vw;
+}

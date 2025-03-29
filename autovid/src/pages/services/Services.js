@@ -1,13 +1,16 @@
 import LightVideo from "../pages videos/Light Game.mp4";
 import "../services/Services.css";
+import "../CommonlyUsedStyles/TransparentBox.css";
+import "../CommonlyUsedStyles/PageStyle.css";
+
 export default function Services() {
   return (
-    <div className="services-page">
-      <video autoPlay loop muted className="services-page-video">
+    <div className="page">
+      <video autoPlay loop muted className="page-video">
         <source src={LightVideo} autoPlay loop />
       </video>
-      <div className="services-page-content">
-        <div className="services-box">
+      <div className="page-content">
+        <div className="transparent-box">
           <h2 className="services-title">For free, you can:</h2>
           <div className="services-description">
             <h3>

@@ -1,15 +1,18 @@
 import LightVideo from "../pages videos/Light Game.mp4";
 import "../about/About.css";
+import "../CommonlyUsedStyles/TransparentBox.css";
+import "../CommonlyUsedStyles/PageStyle.css";
 
 export default function About() {
   return (
-    <div className="about-page">
-      <video autoPlay loop muted className="about-page-video">
+    <div className="page">
+      <video autoPlay loop muted className="page-video">
         <source src={LightVideo} autoPlay loop />
       </video>
-      <div className="about-page-content">
-        <div className="about-box">
+      <div className="page-content">
+        <div className="transparent-box">
           <h2>AutoVid – The Ultimate AI Video Generator 🚀</h2>
+          <div className="empty-line"></div>
           <div className="about-description">
             <h3>
               AutoVid is a web app that automates video creation from text
