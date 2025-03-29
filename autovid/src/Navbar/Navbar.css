@@ -24,7 +24,7 @@ body {
 }
 
 .site-title {
-  font-size: 3rem;
+  font-size: 3vw;
 }
 
 .nav ul {
@@ -32,7 +32,7 @@ body {
   margin: 0;
   list-style: none;
   display: flex;
-  font-size: 1.5rem;
+  font-size: 1.5vw;
 }
 
 .nav a {
@@ -52,4 +52,10 @@ body {
 .nav li:hover {
   background-color: #1c1c84;
   border-radius: 15px;
+}
+
+.app-logo {
+  padding-left: 1vw;
+  height: 4.5vw;
+  margin-top: 0.25vw;
 }

@@ -4,7 +4,7 @@ export default function Navbar() {
   return (
     <nav className="nav">
       <Link to="/" className="site-title">
-        AutoVid
+        AutoVid <img className="app-logo" src="TemporaryLogo.jpg"></img>
       </Link>
       <ul>
         <CustomLink to="/about">About</CustomLink>
