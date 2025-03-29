@@ -1,0 +1,52 @@
+.logInStyles {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.box-login {
+  background: rgb(251, 251, 251);
+  padding: 1.5vw;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  position: relative;
+  height: 75vh;
+  width: 80vh;
+  overflow-y: auto;
+  display: flex;
+}
+
+.center-login-form {
+  display: flex;
+  justify-content: center;
+}
+
+.login-title {
+  padding-bottom: 2rem;
+}
+
+.input-holder-login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.go-to-register {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 1rem;
+}
+
+label {
+  font-size: 1.5em;
+}
+
+input {
+  font-size: 1.2em;
+  padding: 10px;
+  height: 30px;
+  width: 100%;
+  border-radius: 5px;
+}
