@@ -19,7 +19,9 @@ export default function About() {
               with scheduled posting.
             </h3>
             <div className="empty-line"></div>
-            <h3>Simplify content creation with AutoVid!</h3>
+            <h3 className="end-text">
+              Simplify content creation with AutoVid!
+            </h3>
           </div>
         </div>
       </div>

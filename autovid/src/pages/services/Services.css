@@ -26,17 +26,54 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  font-size: 2.5vw;
+  font-size: 1.5vw;
   font-weight: bold;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
+  align-items: flex-start;
   color: white;
-  margin-top: 10vw;
-  margin-left: 35vw;
+  margin-top: 4.5vw;
+  margin-left: 2.5vw;
+  margin-right: 30vw;
 }
 
-.services-page-content h2 {
-  margin-left: 7.5rem;
+.services-description {
+  padding-left: 1vw;
+}
+
+.services-title {
+  margin-bottom: 1.5vw;
+}
+
+.services-page {
+  line-height: 3vw;
+}
+
+.services-box {
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  width: 100%;
+  padding: 1vw;
+  text-align: start;
+}
+
+@keyframes flash {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.try-autovid {
+  display: flex;
+  justify-content: flex-end;
+  animation: flash 1.75s infinite;
 }
