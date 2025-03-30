@@ -1,17 +1,15 @@
 import React, { useState } from "react";
 import LightVideo from "../pages videos/Light Game.mp4";
-import user_icon from "./login icons/person.png";
-import email_icon from "./login icons/email.png";
-import password_icon from "./login icons/password.png";
+import user_icon from "../login/login icons/person.png";
+import email_icon from "../login/login icons/email.png";
+import password_icon from "../login/login icons/password.png";
 import { useNavigate } from "react-router-dom";
-import "../CommonlyUsedStyles/TransparentBox.css";
-import "../CommonlyUsedStyles/PageStyle.css";
 import "./Login&Register.css";
 
-const Login = () => {
+const Register = () => {
   const navigate = useNavigate();
-  const redirectToRegister = () => {
-    navigate("/register");
+  const redirectToLogin = () => {
+    navigate("/login");
   };
 
   return (
@@ -22,7 +20,7 @@ const Login = () => {
       <div className="login-register-page-content">
         <div className="container">
           <div className="header">
-            <div className="text">Login</div>
+            <div className="text">Register</div>
             <div className="underline"></div>{" "}
           </div>
           <div className="inputs">
@@ -38,12 +36,14 @@ const Login = () => {
               <img src={password_icon} alt="" />
               <input type="password" placeholder="Password" />
             </div>{" "}
-            <span className="forgot-password" onClick={redirectToRegister}>
-              Forgot your password? Click here!
-            </span>
-            <div className="submit-container">
-              <button className="submit-login-button">Login</button>
-            </div>
+          </div>
+          <div className="submit-container">
+            <button
+              className="submit-register-button"
+              onClick={redirectToLogin}
+            >
+              Register
+            </button>
           </div>
         </div>
       </div>
@@ -51,4 +51,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;

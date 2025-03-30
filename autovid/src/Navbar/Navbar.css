@@ -56,6 +56,11 @@ body {
 
 .app-logo {
   padding-left: 1vw;
-  height: 4.5vw;
+  height: 3.75vw;
   margin-top: 0.25vw;
+}
+
+.login {
+  border: 2px solid #ffffff;
+  border-radius: 1vw;
 }
