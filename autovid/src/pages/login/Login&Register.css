@@ -58,10 +58,51 @@ body {
 }
 
 .inputs {
-  margin-top: 2.5vw;
+  margin: 1vw;
   display: flex;
   flex-direction: column;
   gap: 1.75vw;
+}
+
+.google-button {
+  display: flex;
+  align-items: center;
+  margin: auto;
+  width: 30vw;
+  height: 5vw;
+  background-color: #eaeaea;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+  margin-top: 1vw;
+}
+
+.google-text {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #797979;
+  font-size: 1.5vw;
+  font-weight: bold;
+}
+
+.google-button:hover .google-text {
+  color: #4b4848;
+  transform: scale(1.05);
+}
+
+.google-button:hover img {
+  transform: scale(1.05);
+}
+
+.or {
+  color: black;
+}
+
+.google-button img {
+  margin: 0vw 1vw;
+  width: 2vw;
+  height: 1.45vw;
 }
 
 .input {
@@ -121,6 +162,13 @@ body {
   cursor: pointer;
   background-color: #007bff;
   color: white;
+  padding: 1vw 2vw;
+  font-size: 2vw;
+  font-weight: bold;
+  border: none;
+  border-radius: 1vw;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out, transform 0.2s;
 }
 
 .submit-login-button:hover {
@@ -142,6 +190,13 @@ body {
   cursor: pointer;
   background-color: #28a745;
   color: white;
+  padding: 1vw 2vw;
+  font-size: 2vw;
+  font-weight: bold;
+  border: none;
+  border-radius: 1vw;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out, transform 0.2s;
 }
 
 .submit-register-button:hover {

@@ -24,7 +24,7 @@ const Register = () => {
             <div className="underline"></div>{" "}
           </div>
           <div className="inputs">
-            <div className="input">
+            <div className="input" style={{ marginTop: "1vw" }}>
               <img src={user_icon} alt="" />
               <input type="text" placeholder="Name" />
             </div>
