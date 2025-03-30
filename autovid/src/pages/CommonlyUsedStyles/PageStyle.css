@@ -40,7 +40,8 @@ body {
 
 .login-register-page-content {
   position: absolute;
-  top: 45%;
+  margin-top: 24.5vw;
+  top: 0;
   left: 50%;
   transform: translate(-50%, -50%);
   display: flex;

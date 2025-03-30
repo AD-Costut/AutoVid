@@ -6,13 +6,6 @@ body {
   margin: 0;
 }
 
-.container {
-  margin: 1rem;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-}
-
 .nav {
   background-color: #020635;
   color: white;
