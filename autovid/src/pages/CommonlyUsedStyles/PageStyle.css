@@ -21,7 +21,9 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  background-color: black;
+  background-image: url("../pages photos/Light Game.jpg");
+  background-size: cover;
+  background-position: center;
 }
 
 .page-content {
