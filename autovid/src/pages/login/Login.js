@@ -42,7 +42,7 @@ const Login = () => {
               <input type="password" placeholder="Password" />
             </div>{" "}
             <span className="forgot-password" onClick={redirectToRegister}>
-              Don't have an accou? Click here!
+              Don't have an account? Click here!
             </span>
             <div className="submit-container">
               <button className="submit-login-button">Login</button>
