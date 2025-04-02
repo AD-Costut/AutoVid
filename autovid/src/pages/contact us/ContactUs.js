@@ -11,26 +11,23 @@ export default function ContactUs() {
       </video>
 
       <div className="page-content">
-        {" "}
         <div className="transparent-box">
           <div className="contact-us">
-            <h3>
-              We're here to help! Reach out to us through the options below:
-            </h3>
-
+            <div>
+              <h3>
+                We're here to help! Reach out to us through the options below:
+              </h3>
+            </div>
             <div className="contact-section">
-              <p>
-                <div className="empty-line"></div>
-                <h3 className="contact-title">Email:</h3>{" "}
-                <a href="mailto:support@autovid.com">support@autovid.com</a>
-              </p>
+              <div className="empty-line"></div>
+              <h3 className="contact-title">Email:</h3>
+              <a href="mailto:support@autovid.com">support@autovid.com</a>
             </div>
 
             <div className="contact-section">
+              <div className="empty-line"></div>
+              <h3 className="contact-title">Social Media:</h3>
               <ul>
-                {" "}
-                <div className="empty-line"></div>
-                <h3 className="contact-title">Social Media:</h3>
                 <li>
                   <a
                     href="https://twitter.com/AutoVidApp"
@@ -62,14 +59,13 @@ export default function ContactUs() {
             </div>
 
             <div className="contact-section">
-              <p>
-                <div className="empty-line"></div>
-                <h3 className="contact-title">Phone:</h3>
-                <>000 000 0000</>
-              </p>
               <div className="empty-line"></div>
-              <h3 className="contact-title">Available: </h3>
-              <p>Monday to Friday, 9:00 AM - 6:00 PM GMT</p>
+              <h3 className="contact-title">Phone:</h3>
+              <span>000 000 0000</span>
+
+              <div className="empty-line"></div>
+              <h3 className="contact-title">Available:</h3>
+              <span>Monday to Friday, 9:00 AM - 6:00 PM GMT</span>
             </div>
 
             <div className="contact-section">

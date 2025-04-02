@@ -1,6 +1,8 @@
-import { Link, useMatch, useResolvedPath } from "react-router-dom";
+import { Link, useMatch, useResolvedPath, useLocation } from "react-router-dom";
 
 export default function Navbar() {
+  const location = useLocation();
+
   return (
     <nav className="nav">
       <Link to="/" className="site-title">
@@ -10,8 +12,11 @@ export default function Navbar() {
         <CustomLink to="/about">About</CustomLink>
         <CustomLink to="/services">Services</CustomLink>
         <CustomLink to="/contact-us">Contact Us</CustomLink>
-        <CustomLink to="/login" className="login">
-          Login
+        <CustomLink
+          to={location.pathname === "/chat" ? "/" : "/login"}
+          className="login"
+        >
+          {location.pathname === "/chat" ? "Logout" : "Login"}
         </CustomLink>
       </ul>
     </nav>

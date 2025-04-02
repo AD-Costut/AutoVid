@@ -6,21 +6,26 @@ import Services from "./pages/services/Services";
 import Home from "./pages/Home/Home";
 import Register from "./pages/login/Register";
 import { Route, Routes } from "react-router-dom";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import Chat from "./pages/chat/Chat";
+
+const clientId =
+  "117534362421-k51kiuvpnuljpeurcj0jk13uvm28j6gm.apps.googleusercontent.com";
 
 function App() {
   return (
-    <>
-      {" "}
+    <GoogleOAuthProvider clientId={clientId}>
       <Navbar />
       <Routes>
-        <Route path="/" element={<Home />}></Route>
-        <Route path="/about" element={<About />}></Route>
-        <Route path="/services" element={<Services />}></Route>
-        <Route path="/contact-us" element={<ContactUs />}></Route>
-        <Route path="/login" element={<Login />}></Route>
-        <Route path="/register" element={<Register />}></Route>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/services" element={<Services />} />
+        <Route path="/contact-us" element={<ContactUs />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/chat" element={<Chat />} />
       </Routes>
-    </>
+    </GoogleOAuthProvider>
   );
 }
 
