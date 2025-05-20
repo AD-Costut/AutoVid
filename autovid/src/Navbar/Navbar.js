@@ -13,10 +13,10 @@ export default function Navbar() {
         <CustomLink to="/services">Services</CustomLink>
         <CustomLink to="/contact-us">Contact Us</CustomLink>
         <CustomLink
-          to={location.pathname === "/chat" ? "/" : "/login"}
+          to={location.pathname === "/promt-to-video" ? "/" : "/login"}
           className="login"
         >
-          {location.pathname === "/chat" ? "Logout" : "Login"}
+          {location.pathname === "/promt-to-video" ? "Logout" : "Login"}
         </CustomLink>
       </ul>
     </nav>

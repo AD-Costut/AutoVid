@@ -20,16 +20,16 @@ const Login = () => {
   };
 
   const redirectToChat = () => {
-    navigate("/chat");
+    navigate("/promt-to-video");
   };
 
   const redirectToLogin = () => {
-    navigate("/chat");
+    navigate("/promt-to-video");
   };
 
   const handleLogin = () => {
     localStorage.setItem("isLoggedIn", "true");
-    navigate("/chat");
+    navigate("/promt-to-video");
   };
 
   const login = useGoogleLogin({

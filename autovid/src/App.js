@@ -8,7 +8,7 @@ import Home from "./pages/Home/Home";
 import Register from "./pages/login/Register";
 import { Route, Routes } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import Chat from "./pages/chat/Chat";
+import PromtToVideo from "./pages/promt to video/PromtToVideo";
 
 const clientId =
   "117534362421-k51kiuvpnuljpeurcj0jk13uvm28j6gm.apps.googleusercontent.com";
@@ -16,7 +16,7 @@ const clientId =
 function App() {
   const location = useLocation();
 
-  const hideNavbarRoutes = ["/chat"];
+  const hideNavbarRoutes = ["/promt-to-video"];
 
   const shouldHideNavbar = hideNavbarRoutes.includes(location.pathname);
 
@@ -31,7 +31,7 @@ function App() {
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/chat" element={<Chat />} />
+        <Route path="/promt-to-video" element={<PromtToVideo />} />
       </Routes>
     </GoogleOAuthProvider>
   );
