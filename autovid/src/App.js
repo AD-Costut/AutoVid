@@ -1,3 +1,4 @@
+import { useLocation } from "react-router-dom";
 import Navbar from "./navbar/Navbar";
 import ContactUs from "./pages/contact us/ContactUs";
 import About from "./pages/about/About";
@@ -13,9 +14,16 @@ const clientId =
   "117534362421-k51kiuvpnuljpeurcj0jk13uvm28j6gm.apps.googleusercontent.com";
 
 function App() {
+  const location = useLocation();
+
+  const hideNavbarRoutes = ["/chat"];
+
+  const shouldHideNavbar = hideNavbarRoutes.includes(location.pathname);
+
   return (
     <GoogleOAuthProvider clientId={clientId}>
-      <Navbar />
+      {!shouldHideNavbar && <Navbar />}
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
