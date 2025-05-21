@@ -121,3 +121,98 @@ button {
 button:hover {
   filter: brightness(1.25);
 }
+
+.main {
+  min-height: calc(100vw - 14rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 6rem 1rem;
+  margin-bottom: 0;
+}
+
+.chats {
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  width: 53vw;
+  max-width: 55vw;
+  height: 25vw;
+  scrollbar-color: rgb(28, 30, 58) rgb(8, 14, 44);
+}
+
+.chat {
+  margin: 1rem;
+  padding: 2rem 3rem;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: flex-start;
+  text-align: justify;
+}
+
+.chatFooter {
+  margin-top: 5rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.inp {
+  padding: 0.5rem;
+  background-color: rgba(28, 30, 58, 1);
+  display: flex;
+  border-radius: 0.5rem;
+  width: 51.5vw;
+  height: 5rem;
+  position: fixed;
+  bottom: 10rem;
+  z-index: 1000;
+}
+
+.inp > input {
+  width: calc(100% - 3rem);
+  outline: none;
+  padding: 1.25rem;
+  color: white;
+  overflow: auto;
+}
+
+.inp > input,
+.send {
+  background: transparent;
+  border: none;
+}
+
+.main img {
+  height: 5vw;
+}
+
+.chatFooter > p {
+  margin: 2rem 0;
+}
+
+.chatImg {
+  object-fit: cover;
+  width: 3.5rem;
+  margin-right: 2rem;
+  border-radius: 0.5rem;
+}
+
+.bot {
+  background-color: rgba(28, 30, 58, 1);
+  width: fit-content;
+  border-radius: 0.5rem;
+}
+
+p {
+  font-size: 2rem;
+}
+
+.disclaimer {
+  width: 50vw;
+  text-align: center;
+  position: fixed;
+  z-index: 1000;
+  bottom: 1.75rem;
+}
