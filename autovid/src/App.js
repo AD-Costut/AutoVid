@@ -8,7 +8,7 @@ import Home from "./pages/Home/Home";
 import Register from "./pages/login/Register";
 import { Route, Routes } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import PromtToVideo from "./pages/promt to video/PromtToVideo";
+import PromptToVideo from "./pages/promt to video/PromptToVideo";
 
 const clientId =
   "117534362421-k51kiuvpnuljpeurcj0jk13uvm28j6gm.apps.googleusercontent.com";
@@ -31,7 +31,7 @@ function App() {
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/promt-to-video" element={<PromtToVideo />} />
+        <Route path="/promt-to-video" element={<PromptToVideo />} />
       </Routes>
     </GoogleOAuthProvider>
   );
