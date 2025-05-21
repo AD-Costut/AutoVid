@@ -23,10 +23,6 @@ body {
   border-right: 1.5px solid rgb(204, 196, 196);
 }
 
-.main {
-  flex: 9;
-}
-
 .logo {
   margin-left: 1rem;
   height: 5rem;
@@ -123,6 +119,7 @@ button:hover {
 }
 
 .main {
+  flex: 9;
   min-height: calc(100vw - 14rem);
   display: flex;
   flex-direction: column;
@@ -136,7 +133,7 @@ button:hover {
   scroll-behavior: smooth;
   width: 53vw;
   max-width: 55vw;
-  height: 25vw;
+  height: 70vh;
   scrollbar-color: rgb(28, 30, 58) rgb(8, 14, 44);
 }
 
