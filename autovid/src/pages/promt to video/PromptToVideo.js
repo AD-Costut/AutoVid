@@ -74,7 +74,7 @@ export default function PromptToVideo() {
         </div>
         <div className="chatFooter">
           <div className="inp">
-            <input type="text" placeholder="Describe your idea" name="" id="" />
+            <textarea placeholder="Describe your idea"></textarea>
             <button className="send">
               <img src={sendButton} alt="Send"></img>
             </button>
