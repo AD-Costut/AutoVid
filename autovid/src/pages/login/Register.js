@@ -25,10 +25,6 @@ const Register = () => {
           </div>
           <div className="inputs">
             <div className="input" style={{ marginTop: "1vw" }}>
-              <img src={user_icon} alt="" />
-              <input type="text" placeholder="Name" />
-            </div>
-            <div className="input">
               <img src={email_icon} alt="" />
               <input type="email" placeholder="Email" />
             </div>
@@ -36,6 +32,10 @@ const Register = () => {
               <img src={password_icon} alt="" />
               <input type="password" placeholder="Password" />
             </div>{" "}
+            <div className="input">
+              <img src={password_icon} alt="" />
+              <input type="password" placeholder="Confirm password" />
+            </div>
           </div>
           <div className="submit-container">
             <button
