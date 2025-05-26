@@ -178,7 +178,7 @@ body {
 }
 
 .submit-register-button {
-  margin-top: 2vw;
+  /* margin-top: 2vw; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -208,4 +208,8 @@ body {
 .gray {
   background: #eaeaea;
   color: #676767;
+}
+
+.under-forms {
+  margin-bottom: 1vw;
 }
