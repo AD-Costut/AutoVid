@@ -3,6 +3,8 @@ import LightVideo from "../pages videos/Light Game.mp4";
 import email_icon from "../login/login icons/email.png";
 import password_icon from "../login/login icons/password.png";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./Login&Register.css";
 
 const Register = () => {
@@ -64,7 +66,22 @@ const Register = () => {
     )
       .then((response) => {
         if (response.status === 200) {
-          handleClickGoToLogIn();
+          toast.success("✅ Successfully registered to AutoVid!", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
+
+          setTimeout(() => {
+            handleClickGoToLogIn();
+          }, 3000);
+        } else if (response.status === 409) {
+          return response.json().then((data) => {
+            throw new Error(data.message || "Email already exists");
+          });
         } else if (response.status === 404) {
           throw new Error("Resource not found");
         } else if (response.status === 500) {
@@ -90,7 +107,7 @@ const Register = () => {
         <div className="container">
           <div className="header">
             <div className="text">Register</div>
-            <div className="underline"></div>{" "}
+            <div className="underline"></div>
           </div>
           <div className="inputs">
             <div className="input">
@@ -110,7 +127,7 @@ const Register = () => {
                 onChange={handleRegisterPassword}
                 value={registerPassword}
               />
-            </div>{" "}
+            </div>
             <div className="input">
               <img src={password_icon} alt="" />
               <input
@@ -180,6 +197,7 @@ const Register = () => {
             </button>
           </div>
         </div>
+        <ToastContainer />
       </div>
     </div>
   );
