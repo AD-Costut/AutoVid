@@ -5,8 +5,24 @@ import logOut from "./promt-to-video-images/log-out-icon.svg";
 import upgradePlan from "./promt-to-video-images/upgrade-plan-icon.svg";
 import sendButton from "./promt-to-video-images/send-icon.svg";
 import userIcon from "./promt-to-video-images/user-icon.png";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function PromptToVideo() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    navigate("/login");
+  };
+
   return (
     <div className="promt-to-video">
       <div className="sideBar">
@@ -39,7 +55,11 @@ export default function PromptToVideo() {
             <img src={upgradePlan} alt="" className="listingItemsImage" />{" "}
             Upgrade plan
           </div>{" "}
-          <div className="listItems">
+          <div
+            className="listItems"
+            onClick={handleLogout}
+            style={{ cursor: "pointer" }}
+          >
             <img src={logOut} alt="" className="listingItemsImage" />
             Log out
           </div>

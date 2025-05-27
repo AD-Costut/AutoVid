@@ -45,6 +45,10 @@ const Login = () => {
   const login = useGoogleLogin({
     onSuccess: (tokenResponse) => {
       console.log(tokenResponse);
+      localStorage.setItem(
+        "accessToken",
+        tokenResponse.access_token || "google-auth"
+      );
       redirectToChatPage();
     },
     onError: (error) => {
@@ -111,7 +115,7 @@ const Login = () => {
         ) {
           setPasswordError("❌ Email or password is incorrect.");
         } else {
-          setPasswordError(`❌ ${error.message}`);
+          setPasswordError("❌ Something went wrong. Please try again later.");
         }
       });
   };
@@ -135,76 +139,82 @@ const Login = () => {
           </div>
 
           <h2 className="or">Or</h2>
-
-          <div className="inputs">
-            <div className="input">
-              <img src={email_icon} alt="" />
-              <input
-                type="email"
-                placeholder="Email"
-                onChange={handleLogInEmail}
-              />
-            </div>
-            {emailError && (
-              <div style={{ color: "red", fontSize: "1.2vw" }}>
-                {emailError}
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleLogInSubmit();
+            }}
+          >
+            <div className="inputs">
+              <div className="input">
+                <img src={email_icon} alt="" />
+                <input
+                  type="email"
+                  placeholder="Email"
+                  onChange={handleLogInEmail}
+                />
               </div>
-            )}
-            <div className="input">
-              <img src={password_icon} alt="" />
-              <input
-                type={showPassword ? "text" : "password"}
-                placeholder="Password"
-                autoComplete="new-password"
-                onChange={handleLogInPassword}
-              />
-            </div>
-            {passwordError && (
-              <div style={{ color: "red", fontSize: "1.2vw" }}>
-                {passwordError}
+              {emailError && (
+                <div style={{ color: "red", fontSize: "1.2vw" }}>
+                  {emailError}
+                </div>
+              )}
+              <div className="input">
+                <img src={password_icon} alt="" />
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  autoComplete="new-password"
+                  onChange={handleLogInPassword}
+                />
               </div>
-            )}
+              {passwordError && (
+                <div style={{ color: "red", fontSize: "1.2vw" }}>
+                  {passwordError}
+                </div>
+              )}
 
-            <label
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "black",
-                cursor: "pointer",
-                fontSize: "1.2vw",
-              }}
-            >
-              <input
-                type="checkbox"
-                checked={showPassword}
-                onChange={handleToggleShowPassword}
+              <label
                 style={{
-                  marginRight: "0.5rem",
-                  width: "1.2vw",
-                  height: "1.2vw",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "black",
+                  cursor: "pointer",
+                  fontSize: "1.2vw",
                 }}
-              />
-              Show Password
-            </label>
-
-            <span
-              className="do-not-have-an-account"
-              onClick={redirectToRegister}
-            >
-              Don't have an account? Click here!
-            </span>
-
-            <div className="submit-container">
-              <button
-                className="submit-login-button"
-                onClick={handleLogInSubmit}
-                disabled={oneClickOnSubmit}
               >
-                Login
-              </button>
-            </div>
-          </div>
+                <input
+                  type="checkbox"
+                  checked={showPassword}
+                  onChange={handleToggleShowPassword}
+                  style={{
+                    marginRight: "0.5rem",
+                    width: "1.2vw",
+                    height: "1.2vw",
+                  }}
+                />
+                Show Password
+              </label>
+
+              <span
+                className="do-not-have-an-account"
+                onClick={redirectToRegister}
+              >
+                Don't have an account? Click here!
+              </span>
+
+              <div className="submit-container">
+                <button
+                  className="submit-login-button"
+                  onClick={handleLogInSubmit}
+                  disabled={oneClickOnSubmit}
+                >
+                  Login
+                </button>
+              </div>
+            </div>{" "}
+          </form>
         </div>
       </div>
     </div>

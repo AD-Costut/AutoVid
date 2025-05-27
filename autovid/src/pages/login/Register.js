@@ -110,93 +110,100 @@ const Register = () => {
             <div className="text">Register</div>
             <div className="underline"></div>
           </div>
-          <div className="inputs">
-            <div className="input">
-              <img src={email_icon} alt="" />
-              <input
-                type="email"
-                placeholder="Email"
-                onChange={handleRegisterName}
-                value={registerEmail}
-              />
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleClick();
+            }}
+          >
+            <div className="inputs">
+              <div className="input">
+                <img src={email_icon} alt="" />
+                <input
+                  type="email"
+                  placeholder="Email"
+                  onChange={handleRegisterName}
+                  value={registerEmail}
+                />
+              </div>
+              <div className="input">
+                <img src={password_icon} alt="" />
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  onChange={handleRegisterPassword}
+                  value={registerPassword}
+                />
+              </div>
+              <div className="input">
+                <img src={password_icon} alt="" />
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Confirm password"
+                  onChange={handleConfirmPassword}
+                  value={confirmPassword}
+                />
+              </div>
             </div>
-            <div className="input">
-              <img src={password_icon} alt="" />
-              <input
-                type={showPassword ? "text" : "password"}
-                placeholder="Password"
-                onChange={handleRegisterPassword}
-                value={registerPassword}
-              />
-            </div>
-            <div className="input">
-              <img src={password_icon} alt="" />
-              <input
-                type={showPassword ? "text" : "password"}
-                placeholder="Confirm password"
-                onChange={handleConfirmPassword}
-                value={confirmPassword}
-              />
-            </div>
-          </div>
-          <div>
-            <label
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "black",
-                cursor: "pointer",
-                marginBottom: "0.5vw",
-                fontSize: "1.2vw",
-              }}
-            >
-              <input
-                type="checkbox"
-                checked={showPassword}
-                onChange={handleToggleShowPassword}
+            <div>
+              <label
                 style={{
-                  marginRight: "0.5rem",
-                  width: "1.2vw",
-                  height: "1.2vw",
-                }}
-              />
-              Show Password
-            </label>
-          </div>
-          <div style={{ textAlign: "center" }}>
-            {emailError && (
-              <div
-                style={{
-                  color: "red",
-                  fontSize: "1.2vw",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "black",
+                  cursor: "pointer",
                   marginBottom: "0.5vw",
+                  fontSize: "1.2vw",
                 }}
               >
-                {emailError}
-              </div>
-            )}
-            {passwordError && (
-              <div
-                style={{
-                  color: "red",
-                  fontSize: "1.2vw",
-                  marginBottom: "0.5vw",
-                }}
+                <input
+                  type="checkbox"
+                  checked={showPassword}
+                  onChange={handleToggleShowPassword}
+                  style={{
+                    marginRight: "0.5rem",
+                    width: "1.2vw",
+                    height: "1.2vw",
+                  }}
+                />
+                Show Password
+              </label>
+            </div>
+            <div style={{ textAlign: "center" }}>
+              {emailError && (
+                <div
+                  style={{
+                    color: "red",
+                    fontSize: "1.2vw",
+                    marginBottom: "0.5vw",
+                  }}
+                >
+                  {emailError}
+                </div>
+              )}
+              {passwordError && (
+                <div
+                  style={{
+                    color: "red",
+                    fontSize: "1.2vw",
+                    marginBottom: "0.5vw",
+                  }}
+                >
+                  {passwordError}
+                </div>
+              )}
+            </div>
+            <div className="submit-container">
+              <button
+                type="submit"
+                className="submit-register-button"
+                disabled={oneClickOnSubmit}
               >
-                {passwordError}
-              </div>
-            )}
-          </div>
-          <div className="submit-container">
-            <button
-              className="submit-register-button"
-              onClick={handleClick}
-              disabled={oneClickOnSubmit}
-            >
-              Register
-            </button>
-          </div>
+                Register
+              </button>
+            </div>
+          </form>
         </div>
         <ToastContainer />
       </div>
