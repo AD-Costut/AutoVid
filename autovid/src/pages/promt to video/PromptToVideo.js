@@ -6,10 +6,12 @@ import upgradePlan from "./promt-to-video-images/upgrade-plan-icon.svg";
 import sendButton from "./promt-to-video-images/send-icon.svg";
 import userIcon from "./promt-to-video-images/user-icon.png";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function PromptToVideo() {
   const navigate = useNavigate();
+
+  const [videoList, setVideoList] = useState([]);
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
@@ -21,6 +23,10 @@ export default function PromptToVideo() {
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
     navigate("/login");
+  };
+  const handleNewVideo = () => {
+    const newLabel = `Untitled ${videoList.length + 1}`;
+    setVideoList([...videoList, newLabel]);
   };
 
   return (
@@ -35,19 +41,17 @@ export default function PromptToVideo() {
               className="logo"
             />
           </div>
-          <button className="midButton">
+          <button className="midButton" onClick={handleNewVideo}>
             <img src={addButton} alt="new video" className="addButton" />
             New Video
           </button>
           <div className="upperSideButton">
-            <button className="query">
-              <img src={messageIcon} alt="Query" />
-              To be changed!
-            </button>
-            <button className="query">
-              <img src={messageIcon} alt="Query" />
-              Work in progress
-            </button>
+            {videoList.map((label, index) => (
+              <button key={index} className="query">
+                <img src={messageIcon} alt="Query" />
+                {label}
+              </button>
+            ))}
           </div>
         </div>
         <div className="lowerSide">
