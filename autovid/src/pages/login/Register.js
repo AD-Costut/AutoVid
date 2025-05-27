@@ -66,13 +66,14 @@ const Register = () => {
     )
       .then((response) => {
         if (response.status === 200) {
-          toast.success("✅ Successfully registered to AutoVid!", {
+          toast.success("Successfully registered!", {
             position: "top-right",
-            autoClose: 3000,
+            autoClose: 2500,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
             draggable: true,
+            className: "custom-toast-success",
           });
 
           setTimeout(() => {

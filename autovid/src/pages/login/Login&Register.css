@@ -213,3 +213,10 @@ body {
 .under-forms {
   margin-bottom: 1vw;
 }
+
+.custom-toast-success {
+  background-color: #28a745 !important;
+  color: white !important;
+  font-weight: bold;
+  font-size: 1.25vw;
+}
