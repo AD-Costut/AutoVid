@@ -36,12 +36,21 @@ body {
   object-fit: cover;
 }
 
-.header {
+.login-header {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.1vw;
   width: 100%;
+}
+
+.register-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1vw;
+  width: 100%;
+  margin-bottom: 1.5vw;
 }
 
 .text {
@@ -139,6 +148,7 @@ body {
   font-size: 1.5vw;
   color: #4c00b4;
   cursor: pointer;
+  margin-bottom: 0.75vw;
 }
 
 .submit-container {
@@ -153,7 +163,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 80%;
   height: 3.5vw;
   font-size: 1.5vw;
   color: #fff;
@@ -181,7 +190,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 80%;
   height: 3.5vw;
   font-size: 1.5vw;
   color: #fff;

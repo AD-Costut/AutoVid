@@ -54,6 +54,11 @@ body {
 }
 
 .login {
-  border: 2px solid #ffffff;
+  border: 2px solid transparent;
   border-radius: 1vw;
+  transition: border-color 0.3s ease;
+}
+
+.login:hover {
+  border-color: #ffffff;
 }

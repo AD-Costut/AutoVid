@@ -106,7 +106,7 @@ const Register = () => {
       </video>
       <div className="login-register-page-content">
         <div className="container">
-          <div className="header">
+          <div className="register-header">
             <div className="text">Register</div>
             <div className="underline"></div>
           </div>
@@ -149,11 +149,9 @@ const Register = () => {
               <label
                 style={{
                   display: "flex",
-                  alignItems: "center",
                   justifyContent: "center",
                   color: "black",
                   cursor: "pointer",
-                  marginBottom: "0.5vw",
                   fontSize: "1.2vw",
                 }}
               >
@@ -165,6 +163,7 @@ const Register = () => {
                     marginRight: "0.5rem",
                     width: "1.2vw",
                     height: "1.2vw",
+                    marginBottom: "0.5vw",
                   }}
                 />
                 Show Password
@@ -176,7 +175,7 @@ const Register = () => {
                   style={{
                     color: "red",
                     fontSize: "1.2vw",
-                    marginBottom: "0.5vw",
+                    marginBottom: "0.75vw",
                   }}
                 >
                   {emailError}
@@ -187,7 +186,7 @@ const Register = () => {
                   style={{
                     color: "red",
                     fontSize: "1.2vw",
-                    marginBottom: "0.5vw",
+                    marginBottom: "0.75vw",
                   }}
                 >
                   {passwordError}

@@ -127,7 +127,7 @@ const Login = () => {
       </video>
       <div className="login-register-page-content">
         <div className="container">
-          <div className="header">
+          <div className="login-header">
             <div className="text">Login</div>
             <div className="underline"></div>
           </div>
@@ -154,65 +154,77 @@ const Login = () => {
                   onChange={handleLogInEmail}
                 />
               </div>
-              {emailError && (
-                <div style={{ color: "red", fontSize: "1.2vw" }}>
-                  {emailError}
-                </div>
-              )}
-              <div className="input">
-                <img src={password_icon} alt="" />
-                <input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Password"
-                  autoComplete="new-password"
-                  onChange={handleLogInPassword}
-                />
-              </div>
-              {passwordError && (
-                <div style={{ color: "red", fontSize: "1.2vw" }}>
-                  {passwordError}
-                </div>
-              )}
-
-              <label
+            </div>
+            <div className="input">
+              <img src={password_icon} alt="" />
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                autoComplete="new-password"
+                onChange={handleLogInPassword}
+              />
+            </div>
+            <label
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                color: "black",
+                cursor: "pointer",
+                fontSize: "1.2vw",
+                marginTop: "0.5vw",
+              }}
+            >
+              <input
+                type="checkbox"
+                checked={showPassword}
+                onChange={handleToggleShowPassword}
                 style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "black",
-                  cursor: "pointer",
+                  marginRight: "0.5rem",
+                  width: "1.2vw",
+                  height: "1.2vw",
+                  marginBottom: "0.5vw",
+                  marginTop: "0.5vw",
+                }}
+              />
+              Show Password
+            </label>{" "}
+            {emailError && (
+              <div
+                style={{
+                  color: "red",
                   fontSize: "1.2vw",
+                  marginBottom: "0.325vw",
                 }}
               >
-                <input
-                  type="checkbox"
-                  checked={showPassword}
-                  onChange={handleToggleShowPassword}
-                  style={{
-                    marginRight: "0.5rem",
-                    width: "1.2vw",
-                    height: "1.2vw",
-                  }}
-                />
-                Show Password
-              </label>
-
-              <span
-                className="do-not-have-an-account"
-                onClick={redirectToRegister}
-              >
-                Don't have an account? Click here!
-              </span>
-
-              <div className="submit-container">
-                <button
-                  className="submit-login-button"
-                  onClick={handleLogInSubmit}
-                  disabled={oneClickOnSubmit}
-                >
-                  Login
-                </button>
+                {emailError}
               </div>
+            )}
+            {passwordError && (
+              <div
+                style={{
+                  color: "red",
+                  fontSize: "1.2vw",
+                  marginBottom: "0.325vw",
+                }}
+              >
+                {passwordError}
+              </div>
+            )}
+            <span
+              className="do-not-have-an-account"
+              onClick={redirectToRegister}
+            >
+              Don't have an account? Click here!
+            </span>
+            <div className="submit-container">
+              <button
+                className="submit-login-button"
+                onClick={handleLogInSubmit}
+                disabled={oneClickOnSubmit}
+              >
+                Login
+              </button>
             </div>{" "}
           </form>
         </div>
