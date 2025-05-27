@@ -219,3 +219,13 @@ body {
   font-weight: bold;
   font-size: 1.25vw;
 }
+
+.custom-toast-success .Toastify__toast-icon svg,
+.custom-toast-success .Toastify__toast-icon {
+  fill: white !important;
+  color: white !important;
+}
+
+.custom-toast-success .Toastify__progress-bar {
+  background: white !important;
+}
