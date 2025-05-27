@@ -15,38 +15,111 @@ const clientId =
 const Login = () => {
   const navigate = useNavigate();
 
+  const [logInEmail, setLogInEmail] = useState("");
+  const [logInPassword, setLogInPassword] = useState("");
+  const [oneClickOnSubmit, setOneClickOnSubmit] = useState(false);
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleToggleShowPassword = () => {
+    setShowPassword((prev) => !prev);
+  };
+
   const redirectToRegister = () => {
     navigate("/register");
   };
 
-  const redirectToChat = () => {
+  const redirectToChatPage = () => {
     navigate("/promt-to-video");
   };
 
-  const redirectToLogin = () => {
-    navigate("/promt-to-video");
+  const handleLogInEmail = (e) => {
+    setLogInEmail(e.target.value);
   };
 
-  const handleLogin = () => {
-    localStorage.setItem("isLoggedIn", "true");
-    navigate("/promt-to-video");
+  const handleLogInPassword = (e) => {
+    setLogInPassword(e.target.value);
   };
 
   const login = useGoogleLogin({
     onSuccess: (tokenResponse) => {
       console.log(tokenResponse);
-      redirectToChat();
+      redirectToChatPage();
     },
     onError: (error) => {
-      console.error(error);
-      redirectToLogin();
+      console.error("Google Login Error:", error);
     },
   });
+
+  const handleLogInSubmit = () => {
+    setEmailError("");
+    setPasswordError("");
+
+    let emailMissing = !logInEmail;
+    let passwordMissing = !logInPassword;
+
+    if (emailMissing && passwordMissing) {
+      setPasswordError("❌ Please enter your email and password.");
+      return;
+    }
+
+    if (emailMissing) {
+      setPasswordError("❌ Please enter your email.");
+      return;
+    }
+
+    if (passwordMissing) {
+      setPasswordError("❌ Please enter your password.");
+      return;
+    }
+
+    setOneClickOnSubmit(true);
+
+    fetch(
+      `https://localhost:7208/api/Login?email=${encodeURIComponent(
+        logInEmail
+      )}&password=${encodeURIComponent(logInPassword)}`,
+      {
+        method: "GET",
+        mode: "cors",
+      }
+    )
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        } else if (response.status === 404) {
+          throw new Error("Resource not found");
+        } else if (response.status === 500) {
+          throw new Error("Internal server error");
+        } else {
+          throw new Error(`Unexpected status code: ${response.status}`);
+        }
+      })
+      .then((data) => {
+        localStorage.setItem("accessToken", data.token);
+        redirectToChatPage();
+      })
+      .catch((error) => {
+        setOneClickOnSubmit(false);
+        console.error("Fetch error:", error.message);
+
+        if (
+          error.message.includes("not found") ||
+          error.message.includes("incorrect") ||
+          error.message.includes("Unauthorized")
+        ) {
+          setPasswordError("❌ Email or password is incorrect.");
+        } else {
+          setPasswordError(`❌ ${error.message}`);
+        }
+      });
+  };
 
   return (
     <div className="page">
       <video autoPlay loop muted className="page-video">
-        <source src={LightVideo} autoPlay loop />
+        <source src={LightVideo} type="video/mp4" />
       </video>
       <div className="login-register-page-content">
         <div className="container">
@@ -60,27 +133,74 @@ const Login = () => {
               <span className="google-text">Login with Google</span>
             </button>
           </div>
+
           <h2 className="or">Or</h2>
+
           <div className="inputs">
             <div className="input">
               <img src={email_icon} alt="" />
-              <input type="email" placeholder="Email" />
+              <input
+                type="email"
+                placeholder="Email"
+                onChange={handleLogInEmail}
+              />
             </div>
+            {emailError && (
+              <div style={{ color: "red", fontSize: "1.2vw" }}>
+                {emailError}
+              </div>
+            )}
             <div className="input">
               <img src={password_icon} alt="" />
-              <form>
-                <input
-                  type="password"
-                  placeholder="Password"
-                  autoComplete="new-password"
-                />
-              </form>
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                autoComplete="new-password"
+                onChange={handleLogInPassword}
+              />
             </div>
-            <span className="forgot-password" onClick={redirectToRegister}>
+            {passwordError && (
+              <div style={{ color: "red", fontSize: "1.2vw" }}>
+                {passwordError}
+              </div>
+            )}
+
+            <label
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "black",
+                cursor: "pointer",
+                fontSize: "1.2vw",
+              }}
+            >
+              <input
+                type="checkbox"
+                checked={showPassword}
+                onChange={handleToggleShowPassword}
+                style={{
+                  marginRight: "0.5rem",
+                  width: "1.2vw",
+                  height: "1.2vw",
+                }}
+              />
+              Show Password
+            </label>
+
+            <span
+              className="do-not-have-an-account"
+              onClick={redirectToRegister}
+            >
               Don't have an account? Click here!
             </span>
+
             <div className="submit-container">
-              <button className="submit-login-button" onClick={handleLogin}>
+              <button
+                className="submit-login-button"
+                onClick={handleLogInSubmit}
+                disabled={oneClickOnSubmit}
+              >
                 Login
               </button>
             </div>
