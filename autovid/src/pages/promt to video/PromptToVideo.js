@@ -1,29 +1,41 @@
+/* global google */
 import "./PromptToVideo.css";
 import addButton from "./promt-to-video-images/plus-icon.png";
 import messageIcon from "./promt-to-video-images/message-icon.svg";
 import logOut from "./promt-to-video-images/log-out-icon.svg";
-import upgradePlan from "./promt-to-video-images/upgrade-plan-icon.svg";
+// import upgradePlan from "./promt-to-video-images/upgrade-plan-icon.svg";
 import sendButton from "./promt-to-video-images/send-icon.svg";
 import userIcon from "./promt-to-video-images/user-icon.png";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
 
 export default function PromptToVideo() {
   const navigate = useNavigate();
 
+  const [user, setUser] = useState(null);
   const [videoList, setVideoList] = useState([]);
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
+    const storedUser = localStorage.getItem("user");
+
     if (!token) {
       navigate("/login");
+    }
+
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
     }
   }, [navigate]);
 
   const handleLogout = () => {
-    localStorage.removeItem("accessToken");
+    google.accounts.id.disableAutoSelect();
+    localStorage.clear();
+    sessionStorage.clear();
     navigate("/login");
   };
+
   const handleNewVideo = () => {
     const newLabel = `Untitled ${videoList.length + 1}`;
     setVideoList([...videoList, newLabel]);
@@ -55,12 +67,12 @@ export default function PromptToVideo() {
           </div>
         </div>
         <div className="lowerSide">
-          <div className="listItems">
-            <img src={upgradePlan} alt="" className="listingItemsImage" />{" "}
+          {/* <div className="listItems">
+            <img src={upgradePlan} alt="" className="listingItemsImage" />
             Upgrade plan
-          </div>{" "}
+          </div> */}
           <div
-            className="listItems"
+            className="listItems logoutButton"
             onClick={handleLogout}
             style={{ cursor: "pointer" }}
           >
@@ -72,7 +84,11 @@ export default function PromptToVideo() {
       <div className="main">
         <div className="chats">
           <div className="chat">
-            <img className="chatImg" src={userIcon} alt="" />
+            <img
+              className="chatImg"
+              src={user?.picture ?? userIcon}
+              alt="User profile"
+            />
             <p className="txt">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
@@ -84,7 +100,7 @@ export default function PromptToVideo() {
             </p>
           </div>
           <div className="chat bot">
-            <img className="chatImg" src="/TemporaryLogo.jpg" alt="" />
+            <img className="chatImg" src="/TemporaryLogoCircle.jpg" alt="" />
             <p className="txt">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut

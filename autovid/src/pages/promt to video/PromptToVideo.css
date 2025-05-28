@@ -36,7 +36,7 @@ body {
   padding: 2.75rem;
   padding-bottom: 0.75rem;
   border-bottom: 1.5px solid rgb(204, 196, 196);
-  height: 75vh;
+  height: 82.5vh;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -208,20 +208,18 @@ button:hover {
   resize: none;
   scrollbar-color: rgb(8, 14, 44) rgb(28, 30, 58);
 }
-
-.main img {
-  height: 5vw;
-}
-
 .chatFooter > p {
   margin: 2rem 0;
 }
 
 .chatImg {
+  width: 5vw;
+  height: 5vw;
+  border-radius: 50%;
   object-fit: cover;
-  width: 3.5rem;
   margin-right: 2rem;
-  border-radius: 0.5rem;
+  display: block;
+  background-color: rgb(222, 224, 245);
 }
 
 .bot {
@@ -240,4 +238,26 @@ p {
   position: fixed;
   z-index: 1000;
   bottom: 1.75rem;
+}
+
+.logoutButton {
+  margin: 0.5rem;
+  margin-left: 1rem;
+  margin-bottom: 0.5vw;
+  display: flex;
+  align-items: center;
+  font-size: 2.5rem;
+  cursor: pointer;
+  background: rgb(9, 17, 52);
+  border: none;
+  color: white;
+  padding: 0.5rem;
+  padding-left: 0;
+  width: 15.5rem;
+  border-radius: 0.5vw;
+  transition: background 0.2s ease;
+}
+
+.logoutButton:hover {
+  background: #7b6eff;
 }

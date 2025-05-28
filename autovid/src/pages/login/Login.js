@@ -43,13 +43,26 @@ const Login = () => {
   };
 
   const login = useGoogleLogin({
-    onSuccess: (tokenResponse) => {
-      console.log(tokenResponse);
-      localStorage.setItem(
-        "accessToken",
-        tokenResponse.access_token || "google-auth"
-      );
-      redirectToChatPage();
+    onSuccess: async (tokenResponse) => {
+      try {
+        const userInfoResponse = await fetch(
+          "https://www.googleapis.com/oauth2/v3/userinfo",
+          {
+            headers: {
+              Authorization: `Bearer ${tokenResponse.access_token}`,
+            },
+          }
+        );
+        const userData = await userInfoResponse.json();
+        console.log("Google user data:", userData);
+
+        localStorage.setItem("accessToken", tokenResponse.access_token);
+        localStorage.setItem("user", JSON.stringify(userData));
+
+        redirectToChatPage();
+      } catch (error) {
+        console.error("Failed to fetch user data:", error);
+      }
     },
     onError: (error) => {
       console.error("Google Login Error:", error);
