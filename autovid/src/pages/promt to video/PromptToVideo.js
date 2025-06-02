@@ -19,8 +19,8 @@ export default function PromptToVideo() {
   const [input, setInput] = useState("");
 
   const IMPUT_CHAR_LIMIT = 750;
-  const [error, setError] = useState("");
 
+  const [optionsDisabled, setOptionsDisabled] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
 
   const [messages, setMessages] = useState([
@@ -40,6 +40,8 @@ export default function PromptToVideo() {
     if (!input.trim()) return;
     if (input.length > IMPUT_CHAR_LIMIT) return;
 
+    if (!selectedOption) return;
+
     const res = await sendMessageToAi(input);
     if (!res) {
       console.error("AI response is undefined!");
@@ -53,6 +55,13 @@ export default function PromptToVideo() {
     ]);
 
     setInput("");
+    setOptionsDisabled(true);
+  };
+
+  const handleOption = (type) => {
+    if (optionsDisabled) return;
+    setSelectedOption(type);
+    setMessages((prev) => [...prev]);
   };
 
   const handleEnter = async (e) => {
@@ -85,14 +94,6 @@ export default function PromptToVideo() {
   const handleNewVideo = () => {
     const newLabel = `Untitled ${videoList.length + 1}`;
     setVideoList([...videoList, newLabel]);
-  };
-
-  const handleOption = (type) => {
-    setSelectedOption(type);
-    setMessages((prev) => [
-      ...prev,
-      { text: `You chose: ${type}`, isBot: false },
-    ]);
   };
 
   return (
@@ -156,24 +157,18 @@ export default function PromptToVideo() {
                   <p className="txt">{message.text}</p>
                   {message.isBot && i === 0 && (
                     <div className="videoOptions">
-                      <button
-                        className="optionButton"
-                        onClick={() => handleOption("Quiz")}
-                      >
-                        Quiz
-                      </button>
-                      <button
-                        className="optionButton"
-                        onClick={() => handleOption("Slide Show")}
-                      >
-                        Slide Show
-                      </button>
-                      <button
-                        className="optionButton"
-                        onClick={() => handleOption("Reddit Story")}
-                      >
-                        Reddit Story
-                      </button>
+                      {["Quiz", "Slide Show", "Reddit Story"].map((type) => (
+                        <button
+                          key={type}
+                          className={`optionButton ${
+                            selectedOption === type ? "selectedOption" : ""
+                          }`}
+                          onClick={() => handleOption(type)}
+                          disabled={optionsDisabled}
+                        >
+                          {type}
+                        </button>
+                      ))}
                     </div>
                   )}
                 </div>
@@ -205,7 +200,11 @@ export default function PromptToVideo() {
             <button
               className="send"
               onClick={handleSend}
-              disabled={input.length > IMPUT_CHAR_LIMIT || !input.trim()}
+              disabled={
+                !selectedOption ||
+                input.length > IMPUT_CHAR_LIMIT ||
+                !input.trim()
+              }
             >
               <img src={sendButton} alt="Send" />
             </button>
