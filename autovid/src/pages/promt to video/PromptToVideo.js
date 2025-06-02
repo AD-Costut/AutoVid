@@ -18,6 +18,9 @@ export default function PromptToVideo() {
   const chatEnd = useRef(null);
   const [input, setInput] = useState("");
 
+  const IMPUT_CHAR_LIMIT = 750;
+  const [error, setError] = useState("");
+
   const [messages, setMessages] = useState([
     {
       text: "Hi! What kind of video can I help you create today?",
@@ -33,9 +36,9 @@ export default function PromptToVideo() {
 
   const handleSend = async () => {
     if (!input.trim()) return;
+    if (input.length > IMPUT_CHAR_LIMIT) return;
 
     const res = await sendMessageToAi(input);
-
     if (!res) {
       console.error("AI response is undefined!");
       return;
@@ -51,7 +54,10 @@ export default function PromptToVideo() {
   };
 
   const handleEnter = async (e) => {
-    if (e.key == "Enter") await handleSend();
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      await handleSend();
+    }
   };
 
   useEffect(() => {
@@ -140,19 +146,34 @@ export default function PromptToVideo() {
               </div>
             ))}
         </div>
-
         <div className="chatFooter">
           <div className="inp">
             <textarea
               placeholder="Describe your idea"
               value={input}
               onKeyDown={handleEnter}
-              onChange={(e) => {
-                setInput(e.target.value);
-              }}
+              onChange={(e) => setInput(e.target.value)}
+              maxLength={IMPUT_CHAR_LIMIT + 100}
             />
-            <button className="send" onClick={handleSend}>
-              <img src={sendButton} alt="Send"></img>
+            <p
+              className="charCount"
+              style={{
+                color: input.length > IMPUT_CHAR_LIMIT ? "red" : "gray",
+                fontSize: "1.75rem",
+                margin: "4px",
+                display: "flex",
+                alignItems: "center",
+                width: "5rem",
+              }}
+            >
+              {input.length}/{IMPUT_CHAR_LIMIT} chars
+            </p>
+            <button
+              className="send"
+              onClick={handleSend}
+              disabled={input.length > IMPUT_CHAR_LIMIT || !input.trim()}
+            >
+              <img src={sendButton} alt="Send" />
             </button>
           </div>
           <p className="disclaimer">
