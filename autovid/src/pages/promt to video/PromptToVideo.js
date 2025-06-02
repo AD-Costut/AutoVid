@@ -7,14 +7,52 @@ import logOut from "./promt-to-video-images/log-out-icon.svg";
 import sendButton from "./promt-to-video-images/send-icon.svg";
 import userIcon from "./promt-to-video-images/user-icon.png";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { jwtDecode } from "jwt-decode";
+import { useEffect, useState, useRef } from "react";
+import { sendMessageToAi } from "./ScriptGenAI";
 
 export default function PromptToVideo() {
   const navigate = useNavigate();
-
   const [user, setUser] = useState(null);
   const [videoList, setVideoList] = useState([]);
+
+  const chatEnd = useRef(null);
+  const [input, setInput] = useState("");
+
+  const [messages, setMessages] = useState([
+    {
+      text: "Hi! What kind of video can I help you create today?",
+      isBot: true,
+    },
+  ]);
+
+  useEffect(() => {
+    if (chatEnd.current) {
+      chatEnd.current.scrollTop = chatEnd.current.scrollHeight;
+    }
+  }, [messages]);
+
+  const handleSend = async () => {
+    if (!input.trim()) return;
+
+    const res = await sendMessageToAi(input);
+
+    if (!res) {
+      console.error("AI response is undefined!");
+      return;
+    }
+
+    setMessages([
+      ...messages,
+      { text: input, isBot: false },
+      { text: res, isBot: true },
+    ]);
+
+    setInput("");
+  };
+
+  const handleEnter = async (e) => {
+    if (e.key == "Enter") await handleSend();
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
@@ -53,7 +91,13 @@ export default function PromptToVideo() {
               className="logo"
             />
           </div>
-          <button className="midButton" onClick={handleNewVideo}>
+          <button
+            className="midButton"
+            onClick={() => {
+              handleNewVideo();
+              // window.location.reload();
+            }}
+          >
             <img src={addButton} alt="new video" className="addButton" />
             New Video
           </button>
@@ -82,40 +126,32 @@ export default function PromptToVideo() {
         </div>
       </div>
       <div className="main">
-        <div className="chats">
-          <div className="chat">
-            <img
-              className="chatImg"
-              src={user?.picture ?? userIcon}
-              alt="User profile"
-            />
-            <p className="txt">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu fugiat
-              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-              sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </p>
-          </div>
-          <div className="chat bot">
-            <img className="chatImg" src="/TemporaryLogoCircle.jpg" alt="" />
-            <p className="txt">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu fugiat
-              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-              sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </p>
-          </div>
+        <div className="chats" ref={chatEnd}>
+          {messages
+            .filter((msg) => msg && typeof msg.isBot !== "undefined")
+            .map((message, i) => (
+              <div key={i} className={message.isBot ? "chat bot" : "chat"}>
+                <img
+                  className="chatImg"
+                  src={message.isBot ? "/TemporaryLogoCircle.jpg" : userIcon}
+                  alt=""
+                />
+                <p className="txt">{message.text}</p>
+              </div>
+            ))}
         </div>
+
         <div className="chatFooter">
           <div className="inp">
-            <textarea placeholder="Describe your idea"></textarea>
-            <button className="send">
+            <textarea
+              placeholder="Describe your idea"
+              value={input}
+              onKeyDown={handleEnter}
+              onChange={(e) => {
+                setInput(e.target.value);
+              }}
+            />
+            <button className="send" onClick={handleSend}>
               <img src={sendButton} alt="Send"></img>
             </button>
           </div>
