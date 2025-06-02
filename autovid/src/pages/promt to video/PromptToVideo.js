@@ -21,6 +21,8 @@ export default function PromptToVideo() {
   const IMPUT_CHAR_LIMIT = 750;
   const [error, setError] = useState("");
 
+  const [selectedOption, setSelectedOption] = useState(null);
+
   const [messages, setMessages] = useState([
     {
       text: "Hi! What kind of video can I help you create today?",
@@ -85,6 +87,14 @@ export default function PromptToVideo() {
     setVideoList([...videoList, newLabel]);
   };
 
+  const handleOption = (type) => {
+    setSelectedOption(type);
+    setMessages((prev) => [
+      ...prev,
+      { text: `You chose: ${type}`, isBot: false },
+    ]);
+  };
+
   return (
     <div className="promt-to-video">
       <div className="sideBar">
@@ -142,7 +152,31 @@ export default function PromptToVideo() {
                   src={message.isBot ? "/TemporaryLogoCircle.jpg" : userIcon}
                   alt=""
                 />
-                <p className="txt">{message.text}</p>
+                <div>
+                  <p className="txt">{message.text}</p>
+                  {message.isBot && i === 0 && (
+                    <div className="videoOptions">
+                      <button
+                        className="optionButton"
+                        onClick={() => handleOption("Quiz")}
+                      >
+                        Quiz
+                      </button>
+                      <button
+                        className="optionButton"
+                        onClick={() => handleOption("Slide Show")}
+                      >
+                        Slide Show
+                      </button>
+                      <button
+                        className="optionButton"
+                        onClick={() => handleOption("Reddit Story")}
+                      >
+                        Reddit Story
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
             ))}
         </div>
