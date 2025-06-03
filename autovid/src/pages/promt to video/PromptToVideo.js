@@ -20,13 +20,13 @@ export default function PromptToVideo() {
 
   const chatEnd = useRef(null);
   const [input, setInput] = useState("");
-
-  const IMPUT_CHAR_LIMIT = 750;
+  const [selectedScriptType, setSelectedScriptType] = useState("");
+  const IMPUT_CHAR_LIMIT = selectedScriptType === "User Script" ? 2000 : 250;
+  const [showCharLimit, setShowCharLimit] = useState(false);
 
   const [optionsDisabled, setOptionsDisabled] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
 
-  const [selectedScriptType, setSelectedScriptType] = useState("");
   const [scriptOptionsDisabled, setScriptOptionsDisabled] = useState(false);
 
   const voiceSelectRef = useRef(null);
@@ -69,8 +69,6 @@ export default function PromptToVideo() {
   };
 
   const handleOption = (type, group) => {
-    if (optionsDisabled) return;
-
     if (group === "video") {
       setSelectedOption(type);
 
@@ -78,24 +76,12 @@ export default function PromptToVideo() {
         setSelectedScriptType("AI Script");
         setScriptOptionsDisabled(true);
       } else {
-        setSelectedScriptType("");
         setScriptOptionsDisabled(false);
       }
     } else if (group === "script" && !scriptOptionsDisabled) {
       setSelectedScriptType(type);
     }
   };
-
-  // const handleOption = (type) => {
-  //   if (optionsDisabled) return;
-  //   setSelectedOption(type);
-  //   setMessages((prev) => [...prev]);
-  // };
-
-  // const handleScriptOption = (type) => {
-  //   if (optionsDisabled) return;
-  //   setSelectedScriptType(type);
-  // };
 
   const handleEnter = async (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -286,22 +272,26 @@ export default function PromptToVideo() {
               value={input}
               onKeyDown={handleEnter}
               onChange={(e) => setInput(e.target.value)}
-              maxLength={IMPUT_CHAR_LIMIT + 100}
+              maxLength={IMPUT_CHAR_LIMIT}
               disabled={aiResponseDone}
             />
-            <p
-              className="charCount"
-              style={{
-                color: input.length > IMPUT_CHAR_LIMIT ? "red" : "gray",
-                fontSize: "1.75rem",
-                margin: "4px",
-                display: "flex",
-                alignItems: "center",
-                width: "5rem",
-              }}
-            >
-              {input.length}/{IMPUT_CHAR_LIMIT} chars
-            </p>
+
+            {selectedScriptType && input.length > 0 && (
+              <p
+                className="charCount"
+                style={{
+                  color: input.length > IMPUT_CHAR_LIMIT ? "red" : "gray",
+                  fontSize: "1.75rem",
+                  margin: "4px",
+                  display: "flex",
+                  alignItems: "center",
+                  width: "5rem",
+                }}
+              >
+                {input.length}/{IMPUT_CHAR_LIMIT} chars
+              </p>
+            )}
+
             <button
               className="send"
               onClick={handleSend}

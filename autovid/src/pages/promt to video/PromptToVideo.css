@@ -193,6 +193,11 @@ button:hover {
   border: none;
 }
 
+.send:disabled {
+  cursor: not-allowed;
+  border: 3px solid #ff2d55;
+}
+
 .inp textarea {
   font-size: 2rem;
   width: 100%;
@@ -366,7 +371,7 @@ p {
 select {
   color: #fff;
   background: #ff29629f;
-  height: 2.5vw;
+  height: 3.25rem;
   padding: 0 20px;
   outline: 0;
   border: 0;
