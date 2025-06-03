@@ -26,9 +26,14 @@ export default function PromptToVideo() {
   const [optionsDisabled, setOptionsDisabled] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
 
+  const [selectedScriptType, setSelectedScriptType] = useState("");
+  const [scriptOptionsDisabled, setScriptOptionsDisabled] = useState(false);
+
   const voiceSelectRef = useRef(null);
   const listenButtonRef = useRef(null);
   const textareaRef = useRef(null);
+
+  const [aiResponseDone, setAiResponseDone] = useState(false);
 
   const [messages, setMessages] = useState([
     {
@@ -44,34 +49,69 @@ export default function PromptToVideo() {
   }, [messages]);
 
   const handleSend = async () => {
-    if (!input.trim()) return;
-    if (input.length > IMPUT_CHAR_LIMIT) return;
+    if (!input.trim() || input.length > IMPUT_CHAR_LIMIT) return;
 
-    const res = await sendMessageToAi(input);
-    if (!res) {
-      console.error("AI response is undefined!");
-      return;
+    setMessages((prev) => [...prev, { text: input, isBot: false }]);
+
+    if (selectedScriptType === "AI Script") {
+      const res = await sendMessageToAi(input);
+      if (!res) {
+        console.error("AI response is undefined!");
+        return;
+      }
+
+      setMessages((prev) => [...prev, { text: res, isBot: true }]);
+      setOptionsDisabled(true);
+      setAiResponseDone(true);
     }
 
-    setMessages([
-      ...messages,
-      { text: input, isBot: false },
-      { text: res, isBot: true },
-    ]);
-
     setInput("");
-    setOptionsDisabled(true);
   };
 
-  const handleOption = (type) => {
+  const handleOption = (type, group) => {
     if (optionsDisabled) return;
-    setSelectedOption(type);
-    setMessages((prev) => [...prev]);
+
+    if (group === "video") {
+      setSelectedOption(type);
+
+      if (type === "Quiz") {
+        setSelectedScriptType("AI Script");
+        setScriptOptionsDisabled(true);
+      } else {
+        setSelectedScriptType("");
+        setScriptOptionsDisabled(false);
+      }
+    } else if (group === "script" && !scriptOptionsDisabled) {
+      setSelectedScriptType(type);
+    }
   };
+
+  // const handleOption = (type) => {
+  //   if (optionsDisabled) return;
+  //   setSelectedOption(type);
+  //   setMessages((prev) => [...prev]);
+  // };
+
+  // const handleScriptOption = (type) => {
+  //   if (optionsDisabled) return;
+  //   setSelectedScriptType(type);
+  // };
 
   const handleEnter = async (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
+
+      if (
+        !selectedOption ||
+        !selectedScriptType ||
+        !voiceSelectRef.current?.value ||
+        input.length > IMPUT_CHAR_LIMIT ||
+        !input.trim() ||
+        aiResponseDone
+      ) {
+        return;
+      }
+
       await handleSend();
     }
   };
@@ -183,7 +223,7 @@ export default function PromptToVideo() {
                             className={`optionButton ${
                               selectedOption === type ? "selectedOption" : ""
                             }`}
-                            onClick={() => handleOption(type)}
+                            onClick={() => handleOption(type, "video")}
                             disabled={optionsDisabled}
                           >
                             {type}
@@ -191,11 +231,44 @@ export default function PromptToVideo() {
                         ))}
                       </div>
                       <div className="voices">
-                        <select ref={voiceSelectRef}></select>
-                        <button className="listen" ref={listenButtonRef}>
+                        <select
+                          className="voicesDropdown"
+                          ref={voiceSelectRef}
+                          disabled={optionsDisabled}
+                        ></select>
+
+                        <button
+                          className="listen"
+                          ref={listenButtonRef}
+                          disabled={optionsDisabled}
+                        >
                           <img src={playIcon} alt="" />
                           Listen
                         </button>
+
+                        <span
+                          className="info-icon"
+                          title="Want to hear how a voice sounds? Type something in the input box, pick a voice, then click Listen."
+                        >
+                          ℹ️
+                        </span>
+                      </div>
+
+                      <div className="scriptOptionsButtons">
+                        {["AI Script", "User Script"].map((type) => (
+                          <button
+                            key={type}
+                            className={`optionButton ${
+                              selectedScriptType === type
+                                ? "selectedOption"
+                                : ""
+                            }`}
+                            onClick={() => handleOption(type, "script")}
+                            disabled={optionsDisabled || scriptOptionsDisabled}
+                          >
+                            {type}
+                          </button>
+                        ))}
                       </div>
                     </div>
                   )}
@@ -212,6 +285,7 @@ export default function PromptToVideo() {
               onKeyDown={handleEnter}
               onChange={(e) => setInput(e.target.value)}
               maxLength={IMPUT_CHAR_LIMIT + 100}
+              disabled={aiResponseDone}
             />
             <p
               className="charCount"
@@ -231,8 +305,11 @@ export default function PromptToVideo() {
               onClick={handleSend}
               disabled={
                 !selectedOption ||
+                !selectedScriptType ||
+                !voiceSelectRef.current?.value ||
                 input.length > IMPUT_CHAR_LIMIT ||
-                !input.trim()
+                !input.trim() ||
+                aiResponseDone
               }
             >
               <img src={sendButton} alt="Send" />

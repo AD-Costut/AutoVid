@@ -310,6 +310,8 @@ p {
   border-radius: 6px;
   border: 0;
   outline: 0;
+  align-items: center;
+  transition: background 0.3s ease;
 }
 
 .listen img {
@@ -317,13 +319,37 @@ p {
   margin-right: 0.7vw;
 }
 
+.listen:disabled {
+  background: #ff2963a0;
+  color: #000000;
+  cursor: not-allowed;
+}
+
 select {
   color: #fff;
-  background: #403d84;
-  height: 3vw;
+  background: #ff29629f;
+  height: 2.5vw;
   padding: 0 20px;
   outline: 0;
   border: 0;
   border-radius: 17.5px;
   width: 25vw;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+select:disabled {
+  color: black;
+  background: #ff2963a0;
+  cursor: not-allowed;
+}
+
+.info-icon {
+  cursor: pointer;
+  font-size: 18px;
+  color: #555;
+}
+
+.info-icon:hover {
+  color: #007bff;
 }
