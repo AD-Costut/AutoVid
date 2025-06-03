@@ -6,9 +6,12 @@ import logOut from "./promt-to-video-images/log-out-icon.svg";
 // import upgradePlan from "./promt-to-video-images/upgrade-plan-icon.svg";
 import sendButton from "./promt-to-video-images/send-icon.svg";
 import userIcon from "./promt-to-video-images/user-icon.png";
+import playIcon from "./promt-to-video-images/play-icon.png";
+import dropDownIcon from "./promt-to-video-images/dropdown-icon.png";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { sendMessageToAi } from "./ScriptGenAI";
+import { textToSpeech } from "./TextToSpeech";
 
 export default function PromptToVideo() {
   const navigate = useNavigate();
@@ -22,6 +25,10 @@ export default function PromptToVideo() {
 
   const [optionsDisabled, setOptionsDisabled] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
+
+  const voiceSelectRef = useRef(null);
+  const listenButtonRef = useRef(null);
+  const textareaRef = useRef(null);
 
   const [messages, setMessages] = useState([
     {
@@ -39,8 +46,6 @@ export default function PromptToVideo() {
   const handleSend = async () => {
     if (!input.trim()) return;
     if (input.length > IMPUT_CHAR_LIMIT) return;
-
-    if (!selectedOption) return;
 
     const res = await sendMessageToAi(input);
     if (!res) {
@@ -95,6 +100,20 @@ export default function PromptToVideo() {
     const newLabel = `Untitled ${videoList.length + 1}`;
     setVideoList([...videoList, newLabel]);
   };
+
+  useEffect(() => {
+    if (
+      voiceSelectRef.current &&
+      listenButtonRef.current &&
+      textareaRef.current
+    ) {
+      textToSpeech(
+        voiceSelectRef.current,
+        listenButtonRef.current,
+        textareaRef.current
+      );
+    }
+  }, []);
 
   return (
     <div className="promt-to-video">
@@ -157,18 +176,27 @@ export default function PromptToVideo() {
                   <p className="txt">{message.text}</p>
                   {message.isBot && i === 0 && (
                     <div className="videoOptions">
-                      {["Quiz", "Slide Show", "Reddit Story"].map((type) => (
-                        <button
-                          key={type}
-                          className={`optionButton ${
-                            selectedOption === type ? "selectedOption" : ""
-                          }`}
-                          onClick={() => handleOption(type)}
-                          disabled={optionsDisabled}
-                        >
-                          {type}
+                      <div className="videoOptionsButtons">
+                        {["Quiz", "Slide Show", "Reddit Story"].map((type) => (
+                          <button
+                            key={type}
+                            className={`optionButton ${
+                              selectedOption === type ? "selectedOption" : ""
+                            }`}
+                            onClick={() => handleOption(type)}
+                            disabled={optionsDisabled}
+                          >
+                            {type}
+                          </button>
+                        ))}
+                      </div>
+                      <div className="voices">
+                        <select ref={voiceSelectRef}></select>
+                        <button className="listen" ref={listenButtonRef}>
+                          <img src={playIcon} alt="" />
+                          Listen
                         </button>
-                      ))}
+                      </div>
                     </div>
                   )}
                 </div>
@@ -178,6 +206,7 @@ export default function PromptToVideo() {
         <div className="chatFooter">
           <div className="inp">
             <textarea
+              ref={textareaRef}
               placeholder="Describe your idea"
               value={input}
               onKeyDown={handleEnter}

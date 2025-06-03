@@ -283,3 +283,47 @@ p {
   color: black;
   cursor: not-allowed;
 }
+
+.videoOptions {
+  display: flex;
+  flex-direction: column;
+}
+
+.videoOptionsButtons {
+  display: flex;
+  align-items: center;
+}
+
+.voices {
+  display: flex;
+  align-items: center;
+}
+
+.listen {
+  display: flex;
+  background: #ff2963;
+  font-weight: bold;
+  color: #fff;
+  cursor: pointer;
+  padding: 8px 16px;
+  margin: 4px;
+  border-radius: 6px;
+  border: 0;
+  outline: 0;
+}
+
+.listen img {
+  width: 1.1vw;
+  margin-right: 0.7vw;
+}
+
+select {
+  color: #fff;
+  background: #403d84;
+  height: 3vw;
+  padding: 0 20px;
+  outline: 0;
+  border: 0;
+  border-radius: 17.5px;
+  width: 25vw;
+}
