@@ -240,14 +240,16 @@ export default function PromptToVideo() {
                         <button
                           className="listen"
                           ref={listenButtonRef}
-                          disabled={optionsDisabled}
+                          disabled={optionsDisabled || !input.trim()}
                         >
                           <img src={playIcon} alt="" />
                           Listen
                         </button>
 
                         <span
-                          className="info-icon"
+                          className={`info-icon ${
+                            optionsDisabled || !input.trim() ? "flash" : ""
+                          }`}
                           title="Want to hear how a voice sounds? Type something in the input box, pick a voice, then click Listen."
                         >
                           ℹ️
