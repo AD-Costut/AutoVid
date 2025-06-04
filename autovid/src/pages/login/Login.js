@@ -43,6 +43,7 @@ const Login = () => {
   };
 
   const login = useGoogleLogin({
+    clientId,
     onSuccess: async (tokenResponse) => {
       try {
         const userInfoResponse = await fetch(
@@ -54,16 +55,34 @@ const Login = () => {
           }
         );
         const userData = await userInfoResponse.json();
-        console.log("Google user data:", userData);
 
-        localStorage.setItem("accessToken", tokenResponse.access_token);
-        localStorage.setItem("user", JSON.stringify(userData));
+        const backendResponse = await fetch(
+          "http://localhost:5000/auth/google-login",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email: userData.email,
+              name: userData.name,
+            }),
+          }
+        );
 
-        redirectToChatPage();
+        const result = await backendResponse.json();
+
+        if (backendResponse.ok) {
+          localStorage.setItem("accessToken", result.token);
+          localStorage.setItem("user", JSON.stringify(result.user));
+          navigate("/promt-to-video");
+        } else {
+          console.error("Backend login failed:", result.error);
+          alert("Backend login failed: " + result.error);
+        }
       } catch (error) {
-        console.error("Failed to fetch user data:", error);
+        console.error("Failed to fetch user data or login backend:", error);
       }
     },
+
     onError: (error) => {
       console.error("Google Login Error:", error);
     },
