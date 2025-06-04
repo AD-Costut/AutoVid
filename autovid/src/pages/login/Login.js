@@ -93,18 +93,22 @@ const Login = () => {
 
     setOneClickOnSubmit(true);
 
-    fetch(
-      `https://localhost:7208/api/Login?email=${encodeURIComponent(
-        logInEmail
-      )}&password=${encodeURIComponent(logInPassword)}`,
-      {
-        method: "GET",
-        mode: "cors",
-      }
-    )
+    fetch("http://localhost:5000/auth/login", {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: logInEmail,
+        password: logInPassword,
+      }),
+    })
       .then((response) => {
         if (response.status === 200) {
           return response.json();
+        } else if (response.status === 401) {
+          throw new Error("Unauthorized");
         } else if (response.status === 404) {
           throw new Error("Resource not found");
         } else if (response.status === 500) {

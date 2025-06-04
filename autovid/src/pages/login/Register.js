@@ -55,15 +55,17 @@ const Register = () => {
 
     setOneClickOnSubmit(true);
 
-    fetch(
-      `https://localhost:7208/api/Login?email=${encodeURIComponent(
-        registerEmail
-      )}&password=${encodeURIComponent(registerPassword)}`,
-      {
-        method: "POST",
-        mode: "cors",
-      }
-    )
+    fetch("http://localhost:5000/auth/register", {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: registerEmail,
+        password: registerPassword,
+      }),
+    })
       .then((response) => {
         if (response.status === 200) {
           toast.success("Successfully registered!", {
