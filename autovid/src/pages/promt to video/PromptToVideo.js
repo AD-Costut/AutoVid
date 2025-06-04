@@ -36,6 +36,11 @@ export default function PromptToVideo() {
 
   const [aiResponseDone, setAiResponseDone] = useState(false);
 
+  const [background, setBackground] = useState(null);
+  const [uploadedFile, setUploadedFile] = useState(null);
+  const [isPreset, setIsPreset] = useState(false);
+  const [presetName, setPresetName] = useState("");
+
   const [messages, setMessages] = useState([
     {
       text: "Hi! What kind of video can I help you create today?",
@@ -83,6 +88,30 @@ export default function PromptToVideo() {
     } else if (group === "script" && !scriptOptionsDisabled) {
       setSelectedScriptType(type);
     }
+  };
+
+  const handleBackgroundUpload = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const isQuiz = selectedOption === "Quiz";
+    const isReddit = selectedOption === "Reddit Story";
+
+    const allowedTypes = isQuiz
+      ? ["image/jpeg", "image/jpg", "image/png"]
+      : isReddit
+      ? ["video/mp4", "video/webm", "video/quicktime"]
+      : ["video/mp4", "video/webm", "video/quicktime"];
+
+    if (!allowedTypes.includes(file.type)) {
+      alert(`Invalid file type for ${selectedOption}`);
+      return;
+    }
+
+    const fileUrl = URL.createObjectURL(file);
+    setUploadedFile(file);
+    setBackground(fileUrl);
+    setIsPreset(false);
   };
 
   const handleEnter = async (e) => {
@@ -222,6 +251,87 @@ export default function PromptToVideo() {
                           </button>
                         ))}
                       </div>
+
+                      {(selectedOption === "Quiz" ||
+                        selectedOption === "Reddit Story") && (
+                        <div className="backgroundSelection">
+                          <p>Select a background:</p>
+                          <div className="presetBackgrounds">
+                            {selectedOption === "Reddit Story" ? (
+                              <>
+                                <button
+                                  onClick={() =>
+                                    setBackground("presetVideo1.mp4")
+                                  }
+                                >
+                                  Video Background 1
+                                </button>
+                                <button
+                                  onClick={() =>
+                                    setBackground("presetVideo2.mp4")
+                                  }
+                                >
+                                  Video Background 2
+                                </button>
+                              </>
+                            ) : (
+                              <>
+                                <button
+                                  onClick={() => setBackground("bg1.jpg")}
+                                >
+                                  Background 1
+                                </button>
+                                <button
+                                  onClick={() => setBackground("bg2.jpg")}
+                                >
+                                  Background 2
+                                </button>
+                              </>
+                            )}
+                          </div>
+
+                          <div className="uploadBackground">
+                            <label htmlFor="backgroundUpload">
+                              Or upload a{" "}
+                              {selectedOption === "Reddit Story"
+                                ? "video"
+                                : "image"}
+                              :
+                            </label>
+                            <input
+                              type="file"
+                              id="backgroundUpload"
+                              accept={
+                                selectedOption === "Reddit Story"
+                                  ? "video/mp4,video/webm,video/quicktime"
+                                  : ".jpg, .jpeg, .png"
+                              }
+                              onChange={handleBackgroundUpload}
+                            />
+                          </div>
+
+                          {/* Afișează background-ul */}
+                          <div className="backgroundPreview">
+                            {background && selectedOption === "Reddit Story" ? (
+                              <video
+                                src={background}
+                                autoPlay
+                                loop
+                                muted
+                                playsInline
+                                style={{ width: "100%", borderRadius: "8px" }}
+                              />
+                            ) : background ? (
+                              <img
+                                src={background}
+                                alt="Background preview"
+                                style={{ width: "100%", borderRadius: "8px" }}
+                              />
+                            ) : null}
+                          </div>
+                        </div>
+                      )}
+
                       <div className="voices">
                         <select
                           className="voicesDropdown"
