@@ -71,8 +71,8 @@ const Login = () => {
         const result = await backendResponse.json();
 
         if (backendResponse.ok) {
-          localStorage.setItem("accessToken", result.token);
-          localStorage.setItem("user", JSON.stringify(result.user));
+          localStorage.setItem("accessToken", tokenResponse.access_token);
+          localStorage.setItem("user", JSON.stringify(userData));
           navigate("/promt-to-video");
         } else {
           console.error("Backend login failed:", result.error);

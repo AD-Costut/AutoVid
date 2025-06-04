@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { sendMessageToAi } from "./ScriptGenAI";
 import { textToSpeech } from "./TextToSpeech";
+import { jwtDecode } from "jwt-decode";
 
 export default function PromptToVideo() {
   const navigate = useNavigate();
@@ -195,7 +196,11 @@ export default function PromptToVideo() {
               <div key={i} className={message.isBot ? "chat bot" : "chat"}>
                 <img
                   className="chatImg"
-                  src={message.isBot ? "/TemporaryLogoCircle.jpg" : userIcon}
+                  src={
+                    message.isBot
+                      ? "/TemporaryLogoCircle.jpg"
+                      : user?.picture ?? userIcon
+                  }
                   alt=""
                 />
                 <div>
