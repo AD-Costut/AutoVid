@@ -62,9 +62,10 @@ export default function PromptToVideo() {
       }
 
       setMessages((prev) => [...prev, { text: res, isBot: true }]);
-      setOptionsDisabled(true);
-      setAiResponseDone(true);
     }
+
+    setOptionsDisabled(true);
+    setAiResponseDone(true);
 
     setInput("");
   };
