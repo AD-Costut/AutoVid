@@ -7,12 +7,15 @@ import logOut from "./promt-to-video-images/log-out-icon.svg";
 import sendButton from "./promt-to-video-images/send-icon.svg";
 import userIcon from "./promt-to-video-images/user-icon.png";
 import playIcon from "./promt-to-video-images/play-icon.png";
-import dropDownIcon from "./promt-to-video-images/dropdown-icon.png";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { sendMessageToAi } from "./ScriptGenAI";
 import { textToSpeech } from "./TextToSpeech";
+import VideoOptions from "./video options/VideoOptions";
 import { jwtDecode } from "jwt-decode";
+import ChatFooter from "./ChatFooter";
+import Sidebar from "./SideBar";
+import "./ButtonsPrToVid.css";
 
 export default function PromptToVideo() {
   const navigate = useNavigate();
@@ -23,7 +26,6 @@ export default function PromptToVideo() {
   const [input, setInput] = useState("");
   const [selectedScriptType, setSelectedScriptType] = useState("");
   const IMPUT_CHAR_LIMIT = selectedScriptType === "User Script" ? 2000 : 250;
-  const [showCharLimit, setShowCharLimit] = useState(false);
 
   const [optionsDisabled, setOptionsDisabled] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
@@ -39,10 +41,7 @@ export default function PromptToVideo() {
   const [background, setBackground] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(null);
   const [isPreset, setIsPreset] = useState(true);
-  const [presetName, setPresetName] = useState("");
   const [selectedBackground, setSelectedBackground] = useState(null);
-  const [backgroundFile, setBackgroundFile] = useState(null);
-  const fileInputRef = useRef(null);
 
   const [messages, setMessages] = useState([
     {
@@ -150,6 +149,18 @@ export default function PromptToVideo() {
     }
   };
 
+  const handleLogout = () => {
+    google.accounts.id.disableAutoSelect();
+    localStorage.clear();
+    sessionStorage.clear();
+    navigate("/login");
+  };
+
+  const handleNewVideo = () => {
+    const newLabel = `Untitled ${videoList.length + 1}`;
+    setVideoList([...videoList, newLabel]);
+  };
+
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     const storedUser = localStorage.getItem("user");
@@ -162,18 +173,6 @@ export default function PromptToVideo() {
       setUser(JSON.parse(storedUser));
     }
   }, [navigate]);
-
-  const handleLogout = () => {
-    google.accounts.id.disableAutoSelect();
-    localStorage.clear();
-    sessionStorage.clear();
-    navigate("/login");
-  };
-
-  const handleNewVideo = () => {
-    const newLabel = `Untitled ${videoList.length + 1}`;
-    setVideoList([...videoList, newLabel]);
-  };
 
   useEffect(() => {
     if (
@@ -191,50 +190,14 @@ export default function PromptToVideo() {
 
   return (
     <div className="promt-to-video">
-      <div className="sideBar">
-        <div className="upperSide">
-          <div className="upperSideTop">
-            <span className="brand">AutoVid</span>{" "}
-            <img
-              src="/TemporaryLogo.jpg"
-              alt="TemporaryLogo"
-              className="logo"
-            />
-          </div>
-          <button
-            className="midButton"
-            onClick={() => {
-              handleNewVideo();
-              // window.location.reload();
-            }}
-          >
-            <img src={addButton} alt="new video" className="addButton" />
-            New Video
-          </button>
-          <div className="upperSideButton">
-            {videoList.map((label, index) => (
-              <button key={index} className="query">
-                <img src={messageIcon} alt="Query" />
-                {label}
-              </button>
-            ))}
-          </div>
-        </div>
-        <div className="lowerSide">
-          {/* <div className="listItems">
-            <img src={upgradePlan} alt="" className="listingItemsImage" />
-            Upgrade plan
-          </div> */}
-          <div
-            className="listItems logoutButton"
-            onClick={handleLogout}
-            style={{ cursor: "pointer" }}
-          >
-            <img src={logOut} alt="" className="listingItemsImage" />
-            Log out
-          </div>
-        </div>
-      </div>
+      <Sidebar
+        handleNewVideo={handleNewVideo}
+        addButton={addButton}
+        videoList={videoList}
+        messageIcon={messageIcon}
+        handleLogout={handleLogout}
+        logOut={logOut}
+      />
       <div className="main">
         <div className="chats" ref={chatEnd}>
           {messages
@@ -253,266 +216,43 @@ export default function PromptToVideo() {
                 <div>
                   <p className="txt">{message.text}</p>
                   {message.isBot && i === 0 && (
-                    <div className="videoOptions">
-                      <div className="videoOptionsButtons">
-                        {["Quiz", "Slide Show", "Reddit Story"].map((type) => (
-                          <button
-                            key={type}
-                            className={`optionButton ${
-                              selectedOption === type ? "selectedOption" : ""
-                            }`}
-                            onClick={() => handleOption(type, "video")}
-                            disabled={optionsDisabled}
-                          >
-                            {type}
-                          </button>
-                        ))}
-                      </div>
-
-                      {(selectedOption === "Quiz" ||
-                        selectedOption === "Reddit Story") && (
-                        <div
-                          className="backgroundSelection"
-                          style={{ display: "flex" }}
-                        >
-                          <div
-                            className="imageVideoSelection"
-                            style={{ width: "20rem" }}
-                          >
-                            <p>Select a background:</p>
-                            <div className="presetBackgrounds">
-                              {selectedOption === "Reddit Story" ? (
-                                <>
-                                  <button
-                                    className={`optionButton ${
-                                      selectedBackground === "bg1"
-                                        ? "selectedOption"
-                                        : ""
-                                    }`}
-                                    onClick={() => {
-                                      setBackground("presetVideo1.mp4");
-                                      setIsPreset(true);
-                                      setSelectedBackground("bg1");
-                                    }}
-                                    disabled={optionsDisabled}
-                                  >
-                                    Video 1
-                                  </button>
-                                  <button
-                                    className={`optionButton ${
-                                      selectedBackground === "bg2"
-                                        ? "selectedOption"
-                                        : ""
-                                    }`}
-                                    onClick={() => {
-                                      setBackground("presetVideo2.mp4");
-                                      setIsPreset(true);
-                                      setSelectedBackground("bg2");
-                                    }}
-                                    disabled={optionsDisabled}
-                                  >
-                                    Video 2
-                                  </button>
-                                </>
-                              ) : (
-                                <>
-                                  <button
-                                    className={`optionButton ${
-                                      selectedBackground === "bg1"
-                                        ? "selectedOption"
-                                        : ""
-                                    }`}
-                                    onClick={() => {
-                                      setBackground("/images/bg1.jpg");
-                                      setIsPreset(true);
-                                      setSelectedBackground("bg1");
-                                    }}
-                                    disabled={optionsDisabled}
-                                  >
-                                    Image 1
-                                  </button>
-
-                                  <button
-                                    className={`optionButton ${
-                                      selectedBackground === "bg2"
-                                        ? "selectedOption"
-                                        : ""
-                                    }`}
-                                    onClick={() => {
-                                      setBackground("/images/bg2.jpg");
-                                      setIsPreset(true);
-                                      setSelectedBackground("bg2");
-                                    }}
-                                    disabled={optionsDisabled}
-                                  >
-                                    Image 2
-                                  </button>
-                                </>
-                              )}
-                            </div>
-
-                            <div
-                              className="uploadBackground"
-                              style={{
-                                display: "flex",
-                                flexDirection: "column",
-                              }}
-                            >
-                              <label htmlFor="backgroundUpload">
-                                Or upload a{" "}
-                                {selectedOption === "Reddit Story"
-                                  ? "video"
-                                  : "image"}
-                                :
-                              </label>
-                              <input
-                                type="file"
-                                id="backgroundUpload"
-                                accept={
-                                  selectedOption === "Reddit Story"
-                                    ? "video/mp4,video/webm,video/quicktime"
-                                    : ".jpg, .jpeg, .png"
-                                }
-                                onChange={handleBackgroundUpload}
-                                disabled={optionsDisabled}
-                                style={{
-                                  cursor: optionsDisabled
-                                    ? "not-allowed"
-                                    : "pointer",
-                                }}
-                              />
-                            </div>
-                          </div>
-                          <div
-                            className="imageVideoSelected"
-                            style={{ display: "flex", alignItems: "center" }}
-                          >
-                            <div className="backgroundPreview">
-                              {background &&
-                              selectedOption === "Reddit Story" ? (
-                                <video
-                                  src={background}
-                                  autoPlay
-                                  loop
-                                  muted
-                                  playsInline
-                                  style={{
-                                    width: "17.5rem",
-                                    borderRadius: "8px",
-                                  }}
-                                />
-                              ) : background ? (
-                                <img
-                                  src={background}
-                                  alt="Background preview"
-                                  style={{
-                                    width: "17.5rem",
-                                    borderRadius: "8px",
-                                  }}
-                                />
-                              ) : null}
-                            </div>
-                          </div>
-                        </div>
-                      )}
-
-                      <div className="voices">
-                        <select
-                          className="voicesDropdown"
-                          ref={voiceSelectRef}
-                          disabled={optionsDisabled}
-                        ></select>
-
-                        <button
-                          className="listen"
-                          ref={listenButtonRef}
-                          disabled={optionsDisabled || !input.trim()}
-                        >
-                          <img src={playIcon} alt="" />
-                          Listen
-                        </button>
-
-                        <span
-                          className={`info-icon ${
-                            optionsDisabled || !input.trim() ? "flash" : ""
-                          }`}
-                          title="Want to hear how a voice sounds? Type something in the input box, pick a voice, then click Listen."
-                        >
-                          ℹ️
-                        </span>
-                      </div>
-
-                      <div className="scriptOptionsButtons">
-                        {["AI Script", "User Script"].map((type) => (
-                          <button
-                            key={type}
-                            className={`optionButton ${
-                              selectedScriptType === type
-                                ? "selectedOption"
-                                : ""
-                            }`}
-                            onClick={() => handleOption(type, "script")}
-                            disabled={optionsDisabled || scriptOptionsDisabled}
-                          >
-                            {type}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
+                    <VideoOptions
+                      selectedOption={selectedOption}
+                      handleOption={handleOption}
+                      optionsDisabled={optionsDisabled}
+                      selectedBackground={selectedBackground}
+                      setBackground={setBackground}
+                      setIsPreset={setIsPreset}
+                      setSelectedBackground={setSelectedBackground}
+                      handleBackgroundUpload={handleBackgroundUpload}
+                      background={background}
+                      voiceSelectRef={voiceSelectRef}
+                      listenButtonRef={listenButtonRef}
+                      input={input}
+                      selectedScriptType={selectedScriptType}
+                      scriptOptionsDisabled={scriptOptionsDisabled}
+                      playIcon={playIcon}
+                    />
                   )}
                 </div>
               </div>
             ))}
         </div>
-        <div className="chatFooter">
-          <div className="inp">
-            <textarea
-              ref={textareaRef}
-              placeholder="Describe your idea"
-              value={input}
-              onKeyDown={handleEnter}
-              onChange={(e) => setInput(e.target.value)}
-              maxLength={IMPUT_CHAR_LIMIT}
-              disabled={aiResponseDone}
-            />
-
-            {selectedScriptType && input.length > 0 && (
-              <p
-                className="charCount"
-                style={{
-                  color: input.length > IMPUT_CHAR_LIMIT ? "red" : "gray",
-                  fontSize: "1.75rem",
-                  margin: "4px",
-                  display: "flex",
-                  alignItems: "center",
-                  width: "5rem",
-                }}
-              >
-                {input.length}/{IMPUT_CHAR_LIMIT} chars
-              </p>
-            )}
-
-            <button
-              className="send"
-              onClick={handleSend}
-              disabled={
-                !selectedOption ||
-                !selectedScriptType ||
-                !voiceSelectRef.current?.value ||
-                input.length > IMPUT_CHAR_LIMIT ||
-                !input.trim() ||
-                aiResponseDone ||
-                (!uploadedFile && !selectedBackground)
-              }
-            >
-              <img src={sendButton} alt="Send" />
-            </button>
-          </div>
-          <p className="disclaimer">
-            AutoVid may generate inaccurate or outdated information. Always
-            fact-check the content before sharing or publishing.
-          </p>
-        </div>
+        <ChatFooter
+          textareaRef={textareaRef}
+          input={input}
+          handleEnter={handleEnter}
+          setInput={setInput}
+          IMPUT_CHAR_LIMIT={IMPUT_CHAR_LIMIT}
+          aiResponseDone={aiResponseDone}
+          selectedScriptType={selectedScriptType}
+          handleSend={handleSend}
+          selectedOption={selectedOption}
+          voiceSelectRef={voiceSelectRef}
+          uploadedFile={uploadedFile}
+          selectedBackground={selectedBackground}
+          sendButton={sendButton}
+        />
       </div>
     </div>
   );

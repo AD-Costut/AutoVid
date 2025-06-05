@@ -1,0 +1,151 @@
+.logoutButton {
+  margin: 0.5rem;
+  margin-left: 1rem;
+  margin-bottom: 0.5vw;
+  display: flex;
+  align-items: center;
+  font-size: 2.5rem;
+  cursor: pointer;
+  background: rgb(9, 17, 52);
+  border: none;
+  color: white;
+  padding: 0.5rem;
+  padding-left: 0;
+  width: 15.5rem;
+  border-radius: 0.5vw;
+  transition: background 0.2s ease;
+}
+
+.logoutButton:hover {
+  background: #7b6eff;
+}
+
+.optionButton {
+  background-color: #5a67d8;
+  color: #ffffff;
+  border: none;
+  padding: 8px 16px;
+  margin: 4px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.optionButton.selectedOption {
+  background-color: #4caf50;
+  color: white;
+}
+
+.optionButton:disabled {
+  color: black;
+  cursor: not-allowed;
+}
+
+.videoOptions {
+  display: flex;
+  flex-direction: column;
+}
+
+.videoOptionsButtons {
+  display: flex;
+  align-items: center;
+}
+
+.voices {
+  display: flex;
+  align-items: center;
+}
+
+.listen {
+  display: flex;
+  background: #ff2963;
+  font-weight: bold;
+  color: #fff;
+  cursor: pointer;
+  padding: 8px 16px;
+  margin: 4px;
+  border-radius: 6px;
+  border: 0;
+  outline: 0;
+  align-items: center;
+  transition: background 0.3s ease;
+}
+
+.listen img {
+  width: 1.1vw;
+  margin-right: 0.7vw;
+}
+
+.listen:disabled {
+  background: #ff2963a0;
+  color: #000000;
+  cursor: not-allowed;
+}
+
+.flash {
+  animation: flash 3.75s 3;
+}
+
+@keyframes flash {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 0.9;
+  }
+  80% {
+    opacity: 0.8;
+  }
+  70% {
+    opacity: 0.7;
+  }
+  60% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  40% {
+    opacity: 0.4;
+  }
+  /* 30% {
+      opacity: 0.3;
+    }
+    20% {
+      opacity: 0.2;
+    }
+    10% {
+      opacity: 0.1;
+    } */
+}
+
+select {
+  color: #fff;
+  background: #ff29629f;
+  height: 3.25rem;
+  padding: 0 20px;
+  outline: 0;
+  border: 0;
+  border-radius: 17.5px;
+  width: 22.5rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+select:disabled {
+  color: black;
+  background: #ff2963a0;
+  cursor: not-allowed;
+}
+
+.info-icon {
+  cursor: pointer;
+  font-size: 18px;
+  color: #555;
+}
+
+.info-icon:hover {
+  color: #007bff;
+}
