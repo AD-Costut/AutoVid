@@ -42,6 +42,7 @@ export default function PromptToVideo() {
   const [presetName, setPresetName] = useState("");
   const [selectedBackground, setSelectedBackground] = useState(null);
   const [backgroundFile, setBackgroundFile] = useState(null);
+  const fileInputRef = useRef(null);
 
   const [messages, setMessages] = useState([
     {
@@ -82,9 +83,20 @@ export default function PromptToVideo() {
       setSelectedOption(type);
 
       if (type === "Quiz") {
+        setBackground("/images/bg1.jpg");
+        setSelectedBackground("bg1");
+        setIsPreset(true);
         setSelectedScriptType("AI Script");
         setScriptOptionsDisabled(true);
+      } else if (type === "Reddit Story") {
+        setBackground("presetVideo1.mp4");
+        setSelectedBackground("bg1");
+        setIsPreset(true);
+        setScriptOptionsDisabled(false);
       } else {
+        setBackground(null);
+        setSelectedBackground(null);
+        setIsPreset(false);
         setScriptOptionsDisabled(false);
       }
     } else if (group === "script" && !scriptOptionsDisabled) {
@@ -259,121 +271,147 @@ export default function PromptToVideo() {
 
                       {(selectedOption === "Quiz" ||
                         selectedOption === "Reddit Story") && (
-                        <div className="backgroundSelection">
-                          <p>Select a background:</p>
-                          <div className="presetBackgrounds">
-                            {selectedOption === "Reddit Story" ? (
-                              <>
-                                <button
-                                  className={`optionButton ${
-                                    selectedBackground === "bg1"
-                                      ? "selectedOption"
-                                      : ""
-                                  }`}
-                                  onClick={() => {
-                                    setBackground("presetVideo1.mp4");
-                                    setIsPreset(true);
-                                    setSelectedBackground("bg1");
-                                  }}
-                                  disabled={optionsDisabled}
-                                >
-                                  Video Background 1
-                                </button>
-                                <button
-                                  className={`optionButton ${
-                                    selectedBackground === "bg2"
-                                      ? "selectedOption"
-                                      : ""
-                                  }`}
-                                  onClick={() => {
-                                    setBackground("presetVideo2.mp4");
-                                    setIsPreset(true);
-                                    setSelectedBackground("bg2");
-                                  }}
-                                  disabled={optionsDisabled}
-                                >
-                                  Video Background 2
-                                </button>
-                              </>
-                            ) : (
-                              <>
-                                <button
-                                  className={`optionButton ${
-                                    selectedBackground === "bg1"
-                                      ? "selectedOption"
-                                      : ""
-                                  }`}
-                                  onClick={() => {
-                                    setBackground("/images/bg1.jpg");
-                                    setIsPreset(true);
-                                    setSelectedBackground("bg1");
-                                  }}
-                                  disabled={optionsDisabled}
-                                >
-                                  Background 1
-                                </button>
+                        <div
+                          className="backgroundSelection"
+                          style={{ display: "flex" }}
+                        >
+                          <div
+                            className="imageVideoSelection"
+                            style={{ width: "20rem" }}
+                          >
+                            <p>Select a background:</p>
+                            <div className="presetBackgrounds">
+                              {selectedOption === "Reddit Story" ? (
+                                <>
+                                  <button
+                                    className={`optionButton ${
+                                      selectedBackground === "bg1"
+                                        ? "selectedOption"
+                                        : ""
+                                    }`}
+                                    onClick={() => {
+                                      setBackground("presetVideo1.mp4");
+                                      setIsPreset(true);
+                                      setSelectedBackground("bg1");
+                                    }}
+                                    disabled={optionsDisabled}
+                                  >
+                                    Video 1
+                                  </button>
+                                  <button
+                                    className={`optionButton ${
+                                      selectedBackground === "bg2"
+                                        ? "selectedOption"
+                                        : ""
+                                    }`}
+                                    onClick={() => {
+                                      setBackground("presetVideo2.mp4");
+                                      setIsPreset(true);
+                                      setSelectedBackground("bg2");
+                                    }}
+                                    disabled={optionsDisabled}
+                                  >
+                                    Video 2
+                                  </button>
+                                </>
+                              ) : (
+                                <>
+                                  <button
+                                    className={`optionButton ${
+                                      selectedBackground === "bg1"
+                                        ? "selectedOption"
+                                        : ""
+                                    }`}
+                                    onClick={() => {
+                                      setBackground("/images/bg1.jpg");
+                                      setIsPreset(true);
+                                      setSelectedBackground("bg1");
+                                    }}
+                                    disabled={optionsDisabled}
+                                  >
+                                    Image 1
+                                  </button>
 
-                                <button
-                                  className={`optionButton ${
-                                    selectedBackground === "bg2"
-                                      ? "selectedOption"
-                                      : ""
-                                  }`}
-                                  onClick={() => {
-                                    setBackground("/images/bg2.jpg");
-                                    setIsPreset(true);
-                                    setSelectedBackground("bg2");
-                                  }}
-                                  disabled={optionsDisabled}
-                                >
-                                  Background 2
-                                </button>
-                              </>
-                            )}
-                          </div>
+                                  <button
+                                    className={`optionButton ${
+                                      selectedBackground === "bg2"
+                                        ? "selectedOption"
+                                        : ""
+                                    }`}
+                                    onClick={() => {
+                                      setBackground("/images/bg2.jpg");
+                                      setIsPreset(true);
+                                      setSelectedBackground("bg2");
+                                    }}
+                                    disabled={optionsDisabled}
+                                  >
+                                    Image 2
+                                  </button>
+                                </>
+                              )}
+                            </div>
 
-                          <div className="uploadBackground">
-                            <label htmlFor="backgroundUpload">
-                              Or upload a{" "}
-                              {selectedOption === "Reddit Story"
-                                ? "video"
-                                : "image"}
-                              :
-                            </label>
-                            <input
-                              type="file"
-                              id="backgroundUpload"
-                              accept={
-                                selectedOption === "Reddit Story"
-                                  ? "video/mp4,video/webm,video/quicktime"
-                                  : ".jpg, .jpeg, .png"
-                              }
-                              onChange={handleBackgroundUpload}
-                              disabled={optionsDisabled}
+                            <div
+                              className="uploadBackground"
                               style={{
-                                cursor: optionsDisabled
-                                  ? "not-allowed"
-                                  : "pointer",
+                                display: "flex",
+                                flexDirection: "column",
                               }}
-                            />
+                            >
+                              <label htmlFor="backgroundUpload">
+                                Or upload a{" "}
+                                {selectedOption === "Reddit Story"
+                                  ? "video"
+                                  : "image"}
+                                :
+                              </label>
+                              <input
+                                type="file"
+                                id="backgroundUpload"
+                                accept={
+                                  selectedOption === "Reddit Story"
+                                    ? "video/mp4,video/webm,video/quicktime"
+                                    : ".jpg, .jpeg, .png"
+                                }
+                                onChange={handleBackgroundUpload}
+                                disabled={optionsDisabled}
+                                style={{
+                                  cursor: optionsDisabled
+                                    ? "not-allowed"
+                                    : "pointer",
+                                }}
+                              />
+                            </div>
                           </div>
-                          <div className="backgroundPreview">
-                            {background && selectedOption === "Reddit Story" ? (
-                              <video
-                                src={background}
-                                autoPlay
-                                loop
-                                muted
-                                playsInline
-                                style={{ width: "20%", borderRadius: "8px" }}
-                              />
-                            ) : background ? (
-                              <img
-                                src={background}
-                                alt="Background preview"
-                                style={{ width: "20%", borderRadius: "8px" }}
-                              />
-                            ) : null}
+                          <div
+                            className="imageVideoSelected"
+                            style={{ display: "flex", alignItems: "center" }}
+                          >
+                            <div className="backgroundPreview">
+                              {background &&
+                              selectedOption === "Reddit Story" ? (
+                                <video
+                                  src={background}
+                                  autoPlay
+                                  loop
+                                  muted
+                                  playsInline
+                                  style={{
+                                    width: "17.5rem",
+                                    borderRadius: "8px",
+                                  }}
+                                />
+                              ) : background ? (
+                                <img
+                                  src={background}
+                                  alt="Background preview"
+                                  style={{
+                                    width: "17.5rem",
+                                    borderRadius: "8px",
+                                  }}
+                                />
+                              ) : null}
+                            </div>
                           </div>
                         </div>
                       )}

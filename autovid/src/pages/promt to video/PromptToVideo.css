@@ -377,7 +377,7 @@ select {
   outline: 0;
   border: 0;
   border-radius: 17.5px;
-  width: 25vw;
+  width: 22.5rem;
   cursor: pointer;
   transition: background 0.3s ease;
 }
