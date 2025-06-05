@@ -19,6 +19,7 @@ const VideoOptions = ({
   selectedScriptType,
   scriptOptionsDisabled,
   playIcon,
+  backgroundPresets,
 }) => {
   return (
     <div className="videoOptions">
@@ -42,66 +43,22 @@ const VideoOptions = ({
           <div className="imageVideoSelection" style={{ width: "20rem" }}>
             <p>Select a background:</p>
             <div className="presetBackgrounds">
-              {selectedOption === "Reddit Story" ? (
-                <>
-                  <button
-                    className={`optionButton ${
-                      selectedBackground === "bg1" ? "selectedOption" : ""
-                    }`}
-                    onClick={() => {
-                      setBackground(Video1);
-                      setIsPreset(true);
-                      setSelectedBackground("bg1");
-                    }}
-                    disabled={optionsDisabled}
-                  >
-                    Video 1
-                  </button>
-                  <button
-                    className={`optionButton ${
-                      selectedBackground === "bg2" ? "selectedOption" : ""
-                    }`}
-                    onClick={() => {
-                      setBackground(Video2);
-                      setIsPreset(true);
-                      setSelectedBackground("bg2");
-                    }}
-                    disabled={optionsDisabled}
-                  >
-                    Video 2
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button
-                    className={`optionButton ${
-                      selectedBackground === "bg1" ? "selectedOption" : ""
-                    }`}
-                    onClick={() => {
-                      setBackground(Image1);
-                      setIsPreset(true);
-                      setSelectedBackground("bg1");
-                    }}
-                    disabled={optionsDisabled}
-                  >
-                    Image 1
-                  </button>
-
-                  <button
-                    className={`optionButton ${
-                      selectedBackground === "bg2" ? "selectedOption" : ""
-                    }`}
-                    onClick={() => {
-                      setBackground(Image2);
-                      setIsPreset(true);
-                      setSelectedBackground("bg2");
-                    }}
-                    disabled={optionsDisabled}
-                  >
-                    Image 2
-                  </button>
-                </>
-              )}
+              {backgroundPresets[selectedOption]?.map(({ id, label, src }) => (
+                <button
+                  key={id}
+                  className={`optionButton ${
+                    selectedBackground === id ? "selectedOption" : ""
+                  }`}
+                  onClick={() => {
+                    setBackground(src);
+                    setIsPreset(true);
+                    setSelectedBackground(id);
+                  }}
+                  disabled={optionsDisabled}
+                >
+                  {label}
+                </button>
+              ))}
             </div>
 
             <div

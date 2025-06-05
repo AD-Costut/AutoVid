@@ -3,7 +3,7 @@ const ChatFooter = ({
   input,
   handleEnter,
   setInput,
-  IMPUT_CHAR_LIMIT,
+  INPUT_CHAR_LIMIT,
   aiResponseDone,
   selectedScriptType,
   handleSend,
@@ -18,11 +18,15 @@ const ChatFooter = ({
       <div className="inp">
         <textarea
           ref={textareaRef}
-          placeholder="Describe your idea"
+          placeholder={
+            selectedScriptType === "User Script"
+              ? "Input your script here..."
+              : "Describe your idea..."
+          }
           value={input}
           onKeyDown={handleEnter}
           onChange={(e) => setInput(e.target.value)}
-          maxLength={IMPUT_CHAR_LIMIT}
+          maxLength={INPUT_CHAR_LIMIT}
           disabled={aiResponseDone}
         />
 
@@ -30,7 +34,7 @@ const ChatFooter = ({
           <p
             className="charCount"
             style={{
-              color: input.length > IMPUT_CHAR_LIMIT ? "red" : "gray",
+              color: input.length > INPUT_CHAR_LIMIT ? "red" : "gray",
               fontSize: "1.75rem",
               margin: "4px",
               display: "flex",
@@ -38,7 +42,7 @@ const ChatFooter = ({
               width: "5rem",
             }}
           >
-            {input.length}/{IMPUT_CHAR_LIMIT} chars
+            {input.length}/{INPUT_CHAR_LIMIT} chars
           </p>
         )}
 
@@ -49,7 +53,7 @@ const ChatFooter = ({
             !selectedOption ||
             !selectedScriptType ||
             !voiceSelectRef.current?.value ||
-            input.length > IMPUT_CHAR_LIMIT ||
+            input.length > INPUT_CHAR_LIMIT ||
             !input.trim() ||
             aiResponseDone ||
             (!uploadedFile && !selectedBackground)

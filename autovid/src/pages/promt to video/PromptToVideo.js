@@ -16,6 +16,10 @@ import { jwtDecode } from "jwt-decode";
 import ChatFooter from "./ChatFooter";
 import Sidebar from "./SideBar";
 import "./ButtonsPrToVid.css";
+import Video1 from "../pages videos/Rotating Earth.mp4";
+import Video2 from "../pages videos/Light Game.mp4";
+import Image1 from "../pages photos/Rotating Earth.jpg";
+import Image2 from "../pages photos/Light Game.jpg";
 
 export default function PromptToVideo() {
   const navigate = useNavigate();
@@ -77,25 +81,36 @@ export default function PromptToVideo() {
     setInput("");
   };
 
+  const backgroundPresets = {
+    "Reddit Story": [
+      { id: "bg1", label: "Video 1", src: Video1 },
+      { id: "bg2", label: "Video 2", src: Video2 },
+    ],
+    Quiz: [
+      { id: "bg1", label: "Image 1", src: Image1 },
+      { id: "bg2", label: "Image 2", src: Image2 },
+    ],
+  };
+
   const handleOption = (type, group) => {
     if (group === "video") {
       setSelectedOption(type);
 
-      if (type === "Quiz") {
-        setBackground("/images/bg1.jpg");
-        setSelectedBackground("bg1");
+      const defaultBg = backgroundPresets[type]?.[0];
+      if (defaultBg) {
+        setBackground(defaultBg.src);
+        setSelectedBackground(defaultBg.id);
         setIsPreset(true);
-        setSelectedScriptType("AI Script");
-        setScriptOptionsDisabled(true);
-      } else if (type === "Reddit Story") {
-        setBackground("presetVideo1.mp4");
-        setSelectedBackground("bg1");
-        setIsPreset(true);
-        setScriptOptionsDisabled(false);
       } else {
         setBackground(null);
         setSelectedBackground(null);
         setIsPreset(false);
+      }
+
+      if (type === "Quiz") {
+        setSelectedScriptType("AI Script");
+        setScriptOptionsDisabled(true);
+      } else {
         setScriptOptionsDisabled(false);
       }
     } else if (group === "script" && !scriptOptionsDisabled) {
@@ -232,6 +247,8 @@ export default function PromptToVideo() {
                       selectedScriptType={selectedScriptType}
                       scriptOptionsDisabled={scriptOptionsDisabled}
                       playIcon={playIcon}
+                      setSelectedScriptType={setSelectedScriptType}
+                      backgroundPresets={backgroundPresets}
                     />
                   )}
                 </div>
