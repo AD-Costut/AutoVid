@@ -245,3 +245,7 @@ p {
   z-index: 1000;
   bottom: 1.75rem;
 }
+
+.listItems logoutButton {
+  cursor: pointer;
+}

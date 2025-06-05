@@ -149,3 +149,72 @@ select:disabled {
 .info-icon:hover {
   color: #007bff;
 }
+
+.backgroundSelection {
+  display: flex;
+}
+
+.uploadBackground {
+  display: flex;
+  flex-direction: column;
+}
+
+.backgroundUplpadLabel {
+  margin-left: 4px;
+}
+
+.imageVideoSelection {
+  width: 20rem;
+}
+
+.input-file {
+  margin-left: 4px;
+  cursor: pointer;
+}
+
+.input-file:disabled {
+  cursor: not-allowed;
+}
+
+.aspectRatioSelector {
+  margin-left: 4px;
+}
+
+.ratio {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.ratio label {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.ratio label :disabled {
+  cursor: not-allowed;
+}
+
+.imageVideoSelected {
+  display: flex;
+  align-items: center;
+}
+
+.preview-video {
+  width: 17.5rem;
+  border-radius: 8px;
+}
+
+.preview-img {
+  width: 17.5rem;
+  border-radius: 8px;
+}
+
+.charCount {
+  font-size: 1.75rem;
+  margin: 4px;
+  display: flex;
+  align-items: center;
+  width: 5rem;
+}

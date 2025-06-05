@@ -33,11 +33,7 @@ const Sidebar = ({
         </div>
       </div>
       <div className="lowerSide">
-        <div
-          className="listItems logoutButton"
-          onClick={handleLogout}
-          style={{ cursor: "pointer" }}
-        >
+        <div className="listItems logoutButton" onClick={handleLogout}>
           <img src={logOut} alt="" className="listingItemsImage" />
           Log out
         </div>

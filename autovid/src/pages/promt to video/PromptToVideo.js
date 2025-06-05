@@ -29,7 +29,7 @@ export default function PromptToVideo() {
   const chatEnd = useRef(null);
   const [input, setInput] = useState("");
   const [selectedScriptType, setSelectedScriptType] = useState("");
-  const IMPUT_CHAR_LIMIT = selectedScriptType === "User Script" ? 2000 : 250;
+  const INPUT_CHAR_LIMIT = selectedScriptType === "User Script" ? 2000 : 250;
 
   const [optionsDisabled, setOptionsDisabled] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
@@ -47,6 +47,8 @@ export default function PromptToVideo() {
   const [isPreset, setIsPreset] = useState(true);
   const [selectedBackground, setSelectedBackground] = useState(null);
 
+  const [videoFormat, setVideoFormat] = useState("16:9");
+
   const [messages, setMessages] = useState([
     {
       text: "Hi! What kind of video can I help you create today?",
@@ -61,7 +63,7 @@ export default function PromptToVideo() {
   }, [messages]);
 
   const handleSend = async () => {
-    if (!input.trim() || input.length > IMPUT_CHAR_LIMIT) return;
+    if (!input.trim() || input.length > INPUT_CHAR_LIMIT) return;
 
     setMessages((prev) => [...prev, { text: input, isBot: false }]);
 
@@ -153,7 +155,7 @@ export default function PromptToVideo() {
         !selectedOption ||
         !selectedScriptType ||
         !voiceSelectRef.current?.value ||
-        input.length > IMPUT_CHAR_LIMIT ||
+        input.length > INPUT_CHAR_LIMIT ||
         !input.trim() ||
         aiResponseDone
       ) {
@@ -249,6 +251,8 @@ export default function PromptToVideo() {
                       playIcon={playIcon}
                       setSelectedScriptType={setSelectedScriptType}
                       backgroundPresets={backgroundPresets}
+                      videoFormat={videoFormat}
+                      setVideoFormat={setVideoFormat}
                     />
                   )}
                 </div>
@@ -260,7 +264,7 @@ export default function PromptToVideo() {
           input={input}
           handleEnter={handleEnter}
           setInput={setInput}
-          IMPUT_CHAR_LIMIT={IMPUT_CHAR_LIMIT}
+          INPUT_CHAR_LIMIT={INPUT_CHAR_LIMIT}
           aiResponseDone={aiResponseDone}
           selectedScriptType={selectedScriptType}
           handleSend={handleSend}

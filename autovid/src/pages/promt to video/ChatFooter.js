@@ -35,11 +35,6 @@ const ChatFooter = ({
             className="charCount"
             style={{
               color: input.length > INPUT_CHAR_LIMIT ? "red" : "gray",
-              fontSize: "1.75rem",
-              margin: "4px",
-              display: "flex",
-              alignItems: "center",
-              width: "5rem",
             }}
           >
             {input.length}/{INPUT_CHAR_LIMIT} chars

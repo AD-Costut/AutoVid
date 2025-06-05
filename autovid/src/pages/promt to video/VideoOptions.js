@@ -20,6 +20,8 @@ const VideoOptions = ({
   scriptOptionsDisabled,
   playIcon,
   backgroundPresets,
+  videoFormat,
+  setVideoFormat,
 }) => {
   return (
     <div className="videoOptions">
@@ -39,8 +41,8 @@ const VideoOptions = ({
       </div>
 
       {(selectedOption === "Quiz" || selectedOption === "Reddit Story") && (
-        <div className="backgroundSelection" style={{ display: "flex" }}>
-          <div className="imageVideoSelection" style={{ width: "20rem" }}>
+        <div className="backgroundSelection">
+          <div className="imageVideoSelection">
             <p>Select a background:</p>
             <div className="presetBackgrounds">
               {backgroundPresets[selectedOption]?.map(({ id, label, src }) => (
@@ -61,18 +63,16 @@ const VideoOptions = ({
               ))}
             </div>
 
-            <div
-              className="uploadBackground"
-              style={{
-                display: "flex",
-                flexDirection: "column",
-              }}
-            >
-              <label htmlFor="backgroundUpload">
+            <div className="uploadBackground">
+              <label
+                className="backgroundUplpadLabel"
+                htmlFor="backgroundUpload"
+              >
                 Or upload a{" "}
                 {selectedOption === "Reddit Story" ? "video" : "image"}:
               </label>
               <input
+                className="input-file"
                 type="file"
                 id="backgroundUpload"
                 accept={
@@ -82,44 +82,56 @@ const VideoOptions = ({
                 }
                 onChange={handleBackgroundUpload}
                 disabled={optionsDisabled}
-                style={{
-                  cursor: optionsDisabled ? "not-allowed" : "pointer",
-                }}
               />
             </div>
-          </div>
-          <div
-            className="imageVideoSelected"
-            style={{ display: "flex", alignItems: "center" }}
-          >
+          </div>{" "}
+          <div className="imageVideoSelected">
             <div className="backgroundPreview">
               {background && selectedOption === "Reddit Story" ? (
                 <video
+                  className="preview-video"
                   src={background}
                   autoPlay
                   loop
                   muted
                   playsInline
-                  style={{
-                    width: "17.5rem",
-                    borderRadius: "8px",
-                  }}
                 />
               ) : background ? (
                 <img
+                  className="preview-img"
                   src={background}
                   alt="Background preview"
-                  style={{
-                    width: "17.5rem",
-                    borderRadius: "8px",
-                  }}
                 />
               ) : null}
             </div>
           </div>
         </div>
       )}
-
+      <div className="aspectRatioSelector">
+        Choose aspect ratio:
+        <div className="ratio">
+          <label>
+            <input
+              type="radio"
+              name="videoFormat"
+              value="16:9"
+              checked={videoFormat === "16:9"}
+              onChange={(e) => setVideoFormat(e.target.value)}
+            />
+            16:9
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="videoFormat"
+              value="9:16"
+              checked={videoFormat === "9:16"}
+              onChange={(e) => setVideoFormat(e.target.value)}
+            />
+            9:16 (Shorts)
+          </label>
+        </div>
+      </div>
       <div className="voices">
         <select
           className="voicesDropdown"
