@@ -38,8 +38,10 @@ export default function PromptToVideo() {
 
   const [background, setBackground] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(null);
-  const [isPreset, setIsPreset] = useState(false);
+  const [isPreset, setIsPreset] = useState(true);
   const [presetName, setPresetName] = useState("");
+  const [selectedBackground, setSelectedBackground] = useState(null);
+  const [backgroundFile, setBackgroundFile] = useState(null);
 
   const [messages, setMessages] = useState([
     {
@@ -112,6 +114,7 @@ export default function PromptToVideo() {
     setUploadedFile(file);
     setBackground(fileUrl);
     setIsPreset(false);
+    setSelectedBackground("upload");
   };
 
   const handleEnter = async (e) => {
@@ -119,6 +122,8 @@ export default function PromptToVideo() {
       e.preventDefault();
 
       if (
+        (!background &&
+          (selectedOption === "Quiz" || selectedOption === "Reddit Story")) ||
         !selectedOption ||
         !selectedScriptType ||
         !voiceSelectRef.current?.value ||
@@ -260,16 +265,32 @@ export default function PromptToVideo() {
                             {selectedOption === "Reddit Story" ? (
                               <>
                                 <button
-                                  onClick={() =>
-                                    setBackground("presetVideo1.mp4")
-                                  }
+                                  className={`optionButton ${
+                                    selectedBackground === "bg1"
+                                      ? "selectedOption"
+                                      : ""
+                                  }`}
+                                  onClick={() => {
+                                    setBackground("presetVideo1.mp4");
+                                    setIsPreset(true);
+                                    setSelectedBackground("bg1");
+                                  }}
+                                  disabled={optionsDisabled}
                                 >
                                   Video Background 1
                                 </button>
                                 <button
-                                  onClick={() =>
-                                    setBackground("presetVideo2.mp4")
-                                  }
+                                  className={`optionButton ${
+                                    selectedBackground === "bg2"
+                                      ? "selectedOption"
+                                      : ""
+                                  }`}
+                                  onClick={() => {
+                                    setBackground("presetVideo2.mp4");
+                                    setIsPreset(true);
+                                    setSelectedBackground("bg2");
+                                  }}
+                                  disabled={optionsDisabled}
                                 >
                                   Video Background 2
                                 </button>
@@ -277,12 +298,33 @@ export default function PromptToVideo() {
                             ) : (
                               <>
                                 <button
-                                  onClick={() => setBackground("bg1.jpg")}
+                                  className={`optionButton ${
+                                    selectedBackground === "bg1"
+                                      ? "selectedOption"
+                                      : ""
+                                  }`}
+                                  onClick={() => {
+                                    setBackground("/images/bg1.jpg");
+                                    setIsPreset(true);
+                                    setSelectedBackground("bg1");
+                                  }}
+                                  disabled={optionsDisabled}
                                 >
                                   Background 1
                                 </button>
+
                                 <button
-                                  onClick={() => setBackground("bg2.jpg")}
+                                  className={`optionButton ${
+                                    selectedBackground === "bg2"
+                                      ? "selectedOption"
+                                      : ""
+                                  }`}
+                                  onClick={() => {
+                                    setBackground("/images/bg2.jpg");
+                                    setIsPreset(true);
+                                    setSelectedBackground("bg2");
+                                  }}
+                                  disabled={optionsDisabled}
                                 >
                                   Background 2
                                 </button>
@@ -307,10 +349,14 @@ export default function PromptToVideo() {
                                   : ".jpg, .jpeg, .png"
                               }
                               onChange={handleBackgroundUpload}
+                              disabled={optionsDisabled}
+                              style={{
+                                cursor: optionsDisabled
+                                  ? "not-allowed"
+                                  : "pointer",
+                              }}
                             />
                           </div>
-
-                          {/* Afișează background-ul */}
                           <div className="backgroundPreview">
                             {background && selectedOption === "Reddit Story" ? (
                               <video
@@ -319,13 +365,13 @@ export default function PromptToVideo() {
                                 loop
                                 muted
                                 playsInline
-                                style={{ width: "100%", borderRadius: "8px" }}
+                                style={{ width: "20%", borderRadius: "8px" }}
                               />
                             ) : background ? (
                               <img
                                 src={background}
                                 alt="Background preview"
-                                style={{ width: "100%", borderRadius: "8px" }}
+                                style={{ width: "20%", borderRadius: "8px" }}
                               />
                             ) : null}
                           </div>
@@ -417,7 +463,8 @@ export default function PromptToVideo() {
                 !voiceSelectRef.current?.value ||
                 input.length > IMPUT_CHAR_LIMIT ||
                 !input.trim() ||
-                aiResponseDone
+                aiResponseDone ||
+                (!uploadedFile && !selectedBackground)
               }
             >
               <img src={sendButton} alt="Send" />
