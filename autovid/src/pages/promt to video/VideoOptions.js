@@ -117,6 +117,7 @@ const VideoOptions = ({
               value="16:9"
               checked={videoFormat === "16:9"}
               onChange={(e) => setVideoFormat(e.target.value)}
+              disabled={optionsDisabled}
             />
             16:9
           </label>
@@ -127,6 +128,7 @@ const VideoOptions = ({
               value="9:16"
               checked={videoFormat === "9:16"}
               onChange={(e) => setVideoFormat(e.target.value)}
+              disabled={optionsDisabled}
             />
             9:16 (Shorts)
           </label>
