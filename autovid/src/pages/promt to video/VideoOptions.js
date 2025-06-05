@@ -1,3 +1,8 @@
+import Video1 from "../pages videos/Rotating Earth.mp4";
+import Video2 from "../pages videos/Light Game.mp4";
+import Image1 from "../pages photos/Rotating Earth.jpg";
+import Image2 from "../pages photos/Light Game.jpg";
+
 const VideoOptions = ({
   selectedOption,
   handleOption,
@@ -44,7 +49,7 @@ const VideoOptions = ({
                       selectedBackground === "bg1" ? "selectedOption" : ""
                     }`}
                     onClick={() => {
-                      setBackground("presetVideo1.mp4");
+                      setBackground(Video1);
                       setIsPreset(true);
                       setSelectedBackground("bg1");
                     }}
@@ -57,7 +62,7 @@ const VideoOptions = ({
                       selectedBackground === "bg2" ? "selectedOption" : ""
                     }`}
                     onClick={() => {
-                      setBackground("presetVideo2.mp4");
+                      setBackground(Video2);
                       setIsPreset(true);
                       setSelectedBackground("bg2");
                     }}
@@ -73,7 +78,7 @@ const VideoOptions = ({
                       selectedBackground === "bg1" ? "selectedOption" : ""
                     }`}
                     onClick={() => {
-                      setBackground("/images/bg1.jpg");
+                      setBackground(Image1);
                       setIsPreset(true);
                       setSelectedBackground("bg1");
                     }}
@@ -87,7 +92,7 @@ const VideoOptions = ({
                       selectedBackground === "bg2" ? "selectedOption" : ""
                     }`}
                     onClick={() => {
-                      setBackground("/images/bg2.jpg");
+                      setBackground(Image2);
                       setIsPreset(true);
                       setSelectedBackground("bg2");
                     }}

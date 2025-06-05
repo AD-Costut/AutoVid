@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { sendMessageToAi } from "./ScriptGenAI";
 import { textToSpeech } from "./TextToSpeech";
-import VideoOptions from "./video options/VideoOptions";
+import VideoOptions from "./VideoOptions";
 import { jwtDecode } from "jwt-decode";
 import ChatFooter from "./ChatFooter";
 import Sidebar from "./SideBar";
