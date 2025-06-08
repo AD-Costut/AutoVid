@@ -49,6 +49,8 @@ export default function PromptToVideo() {
 
   const [videoFormat, setVideoFormat] = useState("16:9");
 
+  const [selectedVideoType, setSelectedVideoType] = useState("");
+
   const [messages, setMessages] = useState([
     {
       text: "Hi! What kind of video can I help you create today?",
@@ -68,18 +70,80 @@ export default function PromptToVideo() {
     setMessages((prev) => [...prev, { text: input, isBot: false }]);
 
     if (selectedScriptType === "AI Script") {
-      const res = await sendMessageToAi(input);
+      let finalPrompt = "";
+
+      if (selectedVideoType === "Quiz") {
+        finalPrompt = `Make a quiz script about: "${input}" for a 1-3 minutes YouTube video.
+      
+      Start with a clear title for the quiz enclosed in &^& markers, like this:
+      &^&[Title]&^&
+      
+      Then write the entire quiz script inside a single pair of #%# delimiters.
+      
+      First, read the input and extract the main idea or topic in a short phrase or few words.
+      
+      The quiz script should start with:
+      Welcome to today's quiz about [main idea extracted from the input]. Get ready to test your knowledge.
+      
+      &^&[Clear Quiz Title]&^&
+
+      Then write exactly 10 questions and answers in this format:
+      
+      Question 1: [Question text]
+      Answer: [Answer text]
+      
+      Question 2: [Question text]
+      Answer: [Answer text]
+      
+      ... continuing until Question 10.
+      
+      Do NOT include any narrator labels, parentheses, comments, or extra delimiters.`;
+      } else if (selectedVideoType === "Slide Show") {
+        finalPrompt = `Make a YouTube slideshow narration script about: "${input}" for a 1-3 minutes video.
+      
+      Start with a clear title enclosed in &^& markers, like this:
+      &^&[Title]&^&
+      
+      Then write the entire narration script inside a single pair of #%# delimiters.
+      
+      Write only the narration text to be spoken throughout the slideshow.
+      
+      Do NOT include slide notes, timestamps, multiple #%# delimiters, parentheses, or narrator labels.
+      
+      Example output format:
+      
+      &^&[Clear Title]&^&
+      #%#
+      [Pure narration script here...]
+      #%#`;
+      } else if (selectedVideoType === "Reddit Story") {
+        finalPrompt = `Create a Reddit-style story script based on: "${input}" for a 1-3 minutes YouTube video.
+      
+      Start with a clear and engaging story title enclosed in &^& markers, like this:
+      &^&[Story Title]&^&
+      
+      Then write the entire story script inside a single pair of #%# delimiters.
+      
+      Write the story as pure text, without any narrator labels, parentheses, stage directions, or commentary.
+      
+      Example output format:
+      
+      &^&[Story Title]&^&
+      #%#
+      [Story text here...]
+      #%#`;
+      }
+
+      const res = await sendMessageToAi(finalPrompt);
       if (!res) {
         console.error("AI response is undefined!");
         return;
       }
-
       setMessages((prev) => [...prev, { text: res, isBot: true }]);
     }
 
     setOptionsDisabled(true);
     setAiResponseDone(true);
-
     setInput("");
   };
 
@@ -97,7 +161,7 @@ export default function PromptToVideo() {
   const handleOption = (type, group) => {
     if (group === "video") {
       setSelectedOption(type);
-
+      setSelectedVideoType(type);
       const defaultBg = backgroundPresets[type]?.[0];
       if (defaultBg) {
         setBackground(defaultBg.src);
