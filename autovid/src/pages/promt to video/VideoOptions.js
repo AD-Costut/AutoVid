@@ -1,7 +1,4 @@
-import Video1 from "../pages videos/Rotating Earth.mp4";
-import Video2 from "../pages videos/Light Game.mp4";
-import Image1 from "../pages photos/Rotating Earth.jpg";
-import Image2 from "../pages photos/Light Game.jpg";
+import { tiktokVoices } from "./TextToSpeech";
 
 const VideoOptions = ({
   selectedOption,
@@ -22,6 +19,8 @@ const VideoOptions = ({
   backgroundPresets,
   videoFormat,
   setVideoFormat,
+  voiceChoice,
+  setVoiceChoice,
 }) => {
   return (
     <div className="videoOptions">
@@ -139,7 +138,15 @@ const VideoOptions = ({
           className="voicesDropdown"
           ref={voiceSelectRef}
           disabled={optionsDisabled}
-        ></select>
+          value={voiceChoice ?? Object.keys(tiktokVoices)[0] ?? ""}
+          onChange={(e) => setVoiceChoice(e.target.value)}
+        >
+          {Object.entries(tiktokVoices).map(([key, label]) => (
+            <option key={key} value={key}>
+              {label}
+            </option>
+          ))}
+        </select>
 
         <button
           className="listen"

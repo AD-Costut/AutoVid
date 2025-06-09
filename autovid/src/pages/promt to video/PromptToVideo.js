@@ -20,6 +20,7 @@ import Video1 from "../pages videos/Rotating Earth.mp4";
 import Video2 from "../pages videos/Light Game.mp4";
 import Image1 from "../pages photos/Rotating Earth.jpg";
 import Image2 from "../pages photos/Light Game.jpg";
+import { tiktokVoices } from "./TextToSpeech";
 
 export default function PromptToVideo() {
   const navigate = useNavigate();
@@ -48,6 +49,7 @@ export default function PromptToVideo() {
   const [selectedBackground, setSelectedBackground] = useState(null);
 
   const [videoFormat, setVideoFormat] = useState("16:9");
+  const [voiceChoice, setVoiceChoice] = useState(Object.keys(tiktokVoices)[0]);
 
   const [selectedVideoType, setSelectedVideoType] = useState("");
 
@@ -134,9 +136,16 @@ export default function PromptToVideo() {
       #%#`;
       }
 
-      const res = await sendMessageToAi(finalPrompt);
+      const res = await sendMessageToAi(finalPrompt, videoFormat, voiceChoice);
       if (!res) {
         console.error("AI response is undefined!");
+        return;
+      }
+      setMessages((prev) => [...prev, { text: res, isBot: true }]);
+    } else if (selectedScriptType === "User Script") {
+      const res = await sendMessageToAi(input, videoFormat, voiceChoice);
+      if (!res) {
+        console.error("User prompt undefined");
         return;
       }
       setMessages((prev) => [...prev, { text: res, isBot: true }]);
@@ -316,7 +325,8 @@ export default function PromptToVideo() {
                       setSelectedScriptType={setSelectedScriptType}
                       backgroundPresets={backgroundPresets}
                       videoFormat={videoFormat}
-                      setVideoFormat={setVideoFormat}
+                      voiceChoice={voiceChoice}
+                      setVoiceChoice={setVoiceChoice}
                     />
                   )}
                 </div>
