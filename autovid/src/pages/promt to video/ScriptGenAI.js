@@ -43,7 +43,6 @@ export async function sendMessageToAi(message) {
     }),
   });
 
-  console.log(message);
   const data = await response.json();
 
   const fullText = data.choices[0].message.content;
