@@ -367,6 +367,7 @@ export default function PromptToVideo() {
                       videoFormat={videoFormat}
                       voiceChoice={voiceChoice}
                       setVoiceChoice={setVoiceChoice}
+                      setVideoFormat={setVideoFormat}
                     />
                   )}
                 </div>

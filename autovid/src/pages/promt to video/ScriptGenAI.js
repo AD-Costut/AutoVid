@@ -12,23 +12,30 @@ export async function sendMessageToAi(
   formData.append("videoFormat", videoFormat);
   formData.append("voiceChoice", voiceChoice);
   formData.append("videoStyle", videoStyle);
-  formData.append("videoType", scriptType);
+  formData.append("scriptType", scriptType);
+
+  console.log("message", message);
+  console.log("videoFormat", videoFormat);
+  console.log("voiceChoice", voiceChoice);
+  console.log("videoStyle", videoStyle);
+  console.log("scriptType", scriptType);
 
   if (file) {
     formData.append("file", file);
   }
 
-  const response = await fetch("http://localhost:5000/chat/completions", {
-    method: "POST",
-    body: formData,
-  });
+  try {
+    const response = await fetch("http://localhost:5000/chat/completions", {
+      method: "POST",
+      body: formData,
+    });
 
-  if (!response.ok) throw new Error(`API error: ${response.statusText}`);
-
-  const videoBlob = await response.blob();
-  const videoUrl = URL.createObjectURL(videoBlob);
-
-  const videoElement = document.getElementById("myVideo");
-  videoElement.src = videoUrl;
-  videoElement.play();
+    if (!response.ok) {
+      console.error(`API error: ${response.statusText}`);
+    } else {
+      console.log("Message sent successfully.");
+    }
+  } catch (error) {
+    console.error("Network or server error:", error);
+  }
 }
