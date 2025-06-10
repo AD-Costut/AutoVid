@@ -167,7 +167,8 @@ export default function PromptToVideo() {
         videoFormat,
         voiceChoice,
         fileToSend,
-        selectedVideoType
+        selectedVideoType,
+        selectedScriptType
       );
       if (!res) {
         console.error("AI response is undefined!");
@@ -180,7 +181,8 @@ export default function PromptToVideo() {
         videoFormat,
         voiceChoice,
         fileToSend,
-        selectedVideoType
+        selectedVideoType,
+        selectedScriptType
       );
       if (!res) {
         console.error("User prompt undefined");

@@ -3,7 +3,8 @@ export async function sendMessageToAi(
   videoFormat,
   voiceChoice,
   file,
-  videoStyle
+  videoStyle,
+  scriptType
 ) {
   const formData = new FormData();
 
@@ -11,6 +12,7 @@ export async function sendMessageToAi(
   formData.append("videoFormat", videoFormat);
   formData.append("voiceChoice", voiceChoice);
   formData.append("videStyle", videoStyle);
+  formData.append("videStyle", scriptType);
 
   if (file) {
     formData.append("file", file);
