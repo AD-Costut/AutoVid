@@ -12,7 +12,7 @@ export async function sendMessageToAi(
   formData.append("videoFormat", videoFormat);
   formData.append("voiceChoice", voiceChoice);
   formData.append("videoStyle", videoStyle);
-  formData.append("videoStyle", scriptType);
+  formData.append("videoType", scriptType);
 
   if (file) {
     formData.append("file", file);
