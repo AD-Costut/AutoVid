@@ -1,15 +1,32 @@
-export async function sendMessageToAi(message, videoFormat, voiceChoice) {
-  const response = await fetch("http://localhost:5000/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ message, videoFormat, voiceChoice }),
-  });
-  if (!response.ok) {
-    throw new Error(`API error: ${response.statusText}`);
+export async function sendMessageToAi(
+  message,
+  videoFormat,
+  voiceChoice,
+  file,
+  videoStyle
+) {
+  const formData = new FormData();
+
+  formData.append("message", message);
+  formData.append("videoFormat", videoFormat);
+  formData.append("voiceChoice", voiceChoice);
+  formData.append("videStyle", videoStyle);
+
+  if (file) {
+    formData.append("file", file);
   }
 
-  const data = await response.json();
-  return data.response;
+  const response = await fetch("http://localhost:5000/chat/completions", {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!response.ok) throw new Error(`API error: ${response.statusText}`);
+
+  const videoBlob = await response.blob();
+  const videoUrl = URL.createObjectURL(videoBlob);
+
+  const videoElement = document.getElementById("myVideo");
+  videoElement.src = videoUrl;
+  videoElement.play();
 }

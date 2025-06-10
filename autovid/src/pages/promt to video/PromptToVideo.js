@@ -53,6 +53,17 @@ export default function PromptToVideo() {
 
   const [selectedVideoType, setSelectedVideoType] = useState("");
 
+  async function urlToFile(url, filename, mimeType) {
+    const res = await fetch(url);
+    const blob = await res.blob();
+    return new File([blob], filename, { type: mimeType });
+  }
+  async function urlToFile(url, filename, mimeType) {
+    const res = await fetch(url);
+    const blob = await res.blob();
+    return new File([blob], filename, { type: mimeType });
+  }
+
   const [messages, setMessages] = useState([
     {
       text: "Hi! What kind of video can I help you create today?",
@@ -67,6 +78,21 @@ export default function PromptToVideo() {
   }, [messages]);
 
   const handleSend = async () => {
+    let fileToSend = null;
+
+    if (!isPreset && uploadedFile) {
+      fileToSend = uploadedFile;
+    } else if (isPreset && background) {
+      const extension = background.split(".").pop().toLowerCase();
+      let mimeType = "application/octet-stream";
+      if (["mp4", "webm", "mov", "quicktime"].includes(extension)) {
+        mimeType = "video/" + extension;
+      } else if (["jpg", "jpeg", "png"].includes(extension)) {
+        mimeType = "image/" + extension;
+      }
+
+      fileToSend = await urlToFile(background, `preset.${extension}`, mimeType);
+    }
     if (!input.trim() || input.length > INPUT_CHAR_LIMIT) return;
 
     setMessages((prev) => [...prev, { text: input, isBot: false }]);
@@ -136,14 +162,26 @@ export default function PromptToVideo() {
       #%#`;
       }
 
-      const res = await sendMessageToAi(finalPrompt, videoFormat, voiceChoice);
+      const res = await sendMessageToAi(
+        finalPrompt,
+        videoFormat,
+        voiceChoice,
+        fileToSend,
+        selectedVideoType
+      );
       if (!res) {
         console.error("AI response is undefined!");
         return;
       }
       setMessages((prev) => [...prev, { text: res, isBot: true }]);
     } else if (selectedScriptType === "User Script") {
-      const res = await sendMessageToAi(input, videoFormat, voiceChoice);
+      const res = await sendMessageToAi(
+        input,
+        videoFormat,
+        voiceChoice,
+        fileToSend,
+        selectedVideoType
+      );
       if (!res) {
         console.error("User prompt undefined");
         return;
