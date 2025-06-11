@@ -30,7 +30,7 @@ export default function PromptToVideo() {
   const chatEnd = useRef(null);
   const [input, setInput] = useState("");
   const [selectedScriptType, setSelectedScriptType] = useState("");
-  const INPUT_CHAR_LIMIT = selectedScriptType === "User Script" ? 2000 : 250;
+  const INPUT_CHAR_LIMIT = selectedScriptType === "User Script" ? 300 : 250;
 
   const [optionsDisabled, setOptionsDisabled] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
@@ -101,38 +101,36 @@ export default function PromptToVideo() {
       let finalPrompt = "";
 
       if (selectedVideoType === "Quiz") {
-        finalPrompt = `Make a quiz script about: "${input}" for a 1-3 minutes YouTube video.
+        finalPrompt = `Make a quiz script about: "${input}" for a 300 chars YouTube video.
       
       Start with a clear title for the quiz enclosed in &^& markers, like this:
-      &^&[Title]&^&
+      &&[Title]&&
       
-      Then write the entire quiz script inside a single pair of #%# delimiters.
+      Then write the entire quiz script inside a single pair of ## delimiters.
       
       First, read the input and extract the main idea or topic in a short phrase or few words.
       
       The quiz script should start with:
-      Welcome to today's quiz about [main idea extracted from the input]. Get ready to test your knowledge.
+      Welcome to today's 2 quizzez about [main idea extracted from the input]. 
       
-      &^&[Clear Quiz Title]&^&
+      &&[Clear Quiz Title]&&
 
-      Then write exactly 10 questions and answers in this format:
+      Then write exactly 2 questions and answers in this format:
+      ##
+      [Short Question1 text]
+      [Short Answer1 text]
       
-      Question 1: [Question text]
-      Answer: [Answer text]
-      
-      Question 2: [Question text]
-      Answer: [Answer text]
-      
-      ... continuing until Question 10.
-      
+      [Short Question2 text]
+      [Short Answer2 text]
+      ##
       Do NOT include any narrator labels, parentheses, comments, or extra delimiters.`;
       } else if (selectedVideoType === "Slide Show") {
-        finalPrompt = `Make a YouTube slideshow narration script about: "${input}" for a 1-3 minutes video.
+        finalPrompt = `Make a YouTube slideshow narration script about: "${input}" for a 300 chars youtube video.
       
-      Start with a clear title enclosed in &^& markers, like this:
-      &^&[Title]&^&
+      Start with a clear title enclosed in && markers, like this:
+      &&[Title]&&
       
-      Then write the entire narration script inside a single pair of #%# delimiters.
+      Then write the entire narration script inside a single pair of ## delimiters.
       
       Write only the narration text to be spoken throughout the slideshow.
       
@@ -140,26 +138,26 @@ export default function PromptToVideo() {
       
       Example output format:
       
-      &^&[Clear Title]&^&
-      #%#
+      &&[Clear Title]&&
+      ##
       [Pure narration script here...]
-      #%#`;
+      ##`;
       } else if (selectedVideoType === "Reddit Story") {
-        finalPrompt = `Create a Reddit-style story script based on: "${input}" for a 1-3 minutes YouTube video.
+        finalPrompt = `Create a Reddit-style story script based on: "${input}" for a 300 chars YouTube video.
       
-      Start with a clear and engaging story title enclosed in &^& markers, like this:
-      &^&[Story Title]&^&
+      Start with a clear and engaging story title enclosed in && markers, like this:
+      &&[Story Title]&&
       
-      Then write the entire story script inside a single pair of #%# delimiters.
+      Then write the entire story script inside a single pair of ## delimiters.
       
       Write the story as pure text, without any narrator labels, parentheses, stage directions, or commentary.
       
       Example output format:
       
-      &^&[Story Title]&^&
-      #%#
+      &&[Story Title]&&
+      ##
       [Story text here...]
-      #%#`;
+      ##`;
       }
 
       const res = await sendMessageToAi(
@@ -344,7 +342,22 @@ export default function PromptToVideo() {
                   alt=""
                 />
                 <div>
-                  <p className="txt">{message.text}</p>
+                  {typeof message.text === "string" ? (
+                    <p className="txt">{message.text}</p>
+                  ) : message.text && message.text.videoUrl ? (
+                    <video
+                      src={
+                        message.text.videoUrl.startsWith("http")
+                          ? message.text.videoUrl
+                          : `http://localhost:5000${message.text.videoUrl}`
+                      }
+                      controls
+                      style={{ maxWidth: "100%", borderRadius: "8px" }}
+                    />
+                  ) : (
+                    <p className="txt">Unsupported message format</p>
+                  )}
+
                   {message.isBot && i === 0 && (
                     <VideoOptions
                       selectedOption={selectedOption}

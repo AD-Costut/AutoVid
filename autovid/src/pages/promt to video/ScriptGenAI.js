@@ -32,10 +32,21 @@ export async function sendMessageToAi(
 
     if (!response.ok) {
       console.error(`API error: ${response.statusText}`);
+      return null;
+    }
+
+    const contentType = response.headers.get("Content-Type");
+
+    if (contentType && contentType.includes("application/json")) {
+      const data = await response.json();
+      console.log("Received JSON:", data);
+      return data;
     } else {
-      console.log("Message sent successfully.");
+      console.warn("Unexpected response type:", contentType);
+      return null;
     }
   } catch (error) {
     console.error("Network or server error:", error);
+    return null;
   }
 }
