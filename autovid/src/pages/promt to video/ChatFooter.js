@@ -12,6 +12,7 @@ const ChatFooter = ({
   uploadedFile,
   selectedBackground,
   sendButton,
+  isLoading,
 }) => {
   return (
     <div className="chatFooter">
@@ -51,7 +52,10 @@ const ChatFooter = ({
             input.length > INPUT_CHAR_LIMIT ||
             !input.trim() ||
             aiResponseDone ||
-            (!uploadedFile && !selectedBackground)
+            isLoading ||
+            (selectedScriptType == "Slide Show" &&
+              !uploadedFile &&
+              !selectedBackground)
           }
         >
           <img src={sendButton} alt="Send" />

@@ -48,7 +48,7 @@ export default function PromptToVideo() {
   const [isPreset, setIsPreset] = useState(true);
   const [selectedBackground, setSelectedBackground] = useState(null);
 
-  const [videoFormat, setVideoFormat] = useState("16:9");
+  const [aspectRatio, setaspectRatio] = useState("16:9");
   const [voiceChoice, setVoiceChoice] = useState(Object.keys(tiktokVoices)[0]);
 
   const [selectedVideoType, setSelectedVideoType] = useState("");
@@ -80,6 +80,9 @@ export default function PromptToVideo() {
   const handleSend = async () => {
     let fileToSend = null;
 
+    if (isLoading) return;
+
+    setIsLoading(true);
     if (!isPreset && uploadedFile) {
       fileToSend = uploadedFile;
     } else if (isPreset && background) {
@@ -101,7 +104,7 @@ export default function PromptToVideo() {
       let finalPrompt = "";
 
       if (selectedVideoType === "Quiz") {
-        finalPrompt = `Make a quiz script about: "${input}" for a 300 chars YouTube video.
+        finalPrompt = `Make a quiz script about: "${input}" for a YouTube video.
       
       Start with a clear title for the quiz enclosed in &^& markers, like this:
       &&[Title]&&
@@ -123,9 +126,10 @@ export default function PromptToVideo() {
       [Short Question2 text]
       [Short Answer2 text]
       ##
+      300 characters max
       Do NOT include any narrator labels, parentheses, comments, or extra delimiters.`;
       } else if (selectedVideoType === "Slide Show") {
-        finalPrompt = `Make a YouTube slideshow narration script about: "${input}" for a 300 chars youtube video.
+        finalPrompt = `Make a YouTube slideshow narration script about: "${input}" for a youtube video.
       
       Start with a clear title enclosed in && markers, like this:
       &&[Title]&&
@@ -141,9 +145,10 @@ export default function PromptToVideo() {
       &&[Clear Title]&&
       ##
       [Pure narration script here...]
-      ##`;
+      ##
+      300 characters max`;
       } else if (selectedVideoType === "Reddit Story") {
-        finalPrompt = `Create a Reddit-style story script based on: "${input}" for a 300 chars YouTube video.
+        finalPrompt = `Create a Reddit-style story script based on: "${input}" for a YouTube video.
       
       Start with a clear and engaging story title enclosed in && markers, like this:
       &&[Story Title]&&
@@ -157,12 +162,13 @@ export default function PromptToVideo() {
       &&[Story Title]&&
       ##
       [Story text here...]
-      ##`;
+      ##
+      300 characters max`;
       }
 
       const res = await sendMessageToAi(
         finalPrompt,
-        videoFormat,
+        aspectRatio,
         voiceChoice,
         fileToSend,
         selectedVideoType,
@@ -176,7 +182,7 @@ export default function PromptToVideo() {
     } else if (selectedScriptType === "User Script") {
       const res = await sendMessageToAi(
         input,
-        videoFormat,
+        aspectRatio,
         voiceChoice,
         fileToSend,
         selectedVideoType,
@@ -315,6 +321,8 @@ export default function PromptToVideo() {
       );
     }
   }, []);
+  const isPortrait = aspectRatio === "9:16";
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <div className="promt-to-video">
@@ -352,7 +360,10 @@ export default function PromptToVideo() {
                           : `http://localhost:5000${message.text.videoUrl}`
                       }
                       controls
-                      style={{ maxWidth: "100%", borderRadius: "8px" }}
+                      style={{
+                        maxWidth: isPortrait ? "35%" : "100%",
+                        borderRadius: "8px",
+                      }}
                     />
                   ) : (
                     <p className="txt">Unsupported message format</p>
@@ -377,10 +388,10 @@ export default function PromptToVideo() {
                       playIcon={playIcon}
                       setSelectedScriptType={setSelectedScriptType}
                       backgroundPresets={backgroundPresets}
-                      videoFormat={videoFormat}
+                      aspectRatio={aspectRatio}
                       voiceChoice={voiceChoice}
                       setVoiceChoice={setVoiceChoice}
-                      setVideoFormat={setVideoFormat}
+                      setaspectRatio={setaspectRatio}
                     />
                   )}
                 </div>
@@ -401,6 +412,7 @@ export default function PromptToVideo() {
           uploadedFile={uploadedFile}
           selectedBackground={selectedBackground}
           sendButton={sendButton}
+          isLoading={isLoading}
         />
       </div>
     </div>

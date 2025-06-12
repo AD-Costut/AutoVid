@@ -1,6 +1,6 @@
 export async function sendMessageToAi(
   message,
-  videoFormat,
+  aspectRatio,
   voiceChoice,
   file,
   videoStyle,
@@ -9,13 +9,13 @@ export async function sendMessageToAi(
   const formData = new FormData();
 
   formData.append("message", message);
-  formData.append("videoFormat", videoFormat);
+  formData.append("aspectRatio", aspectRatio);
   formData.append("voiceChoice", voiceChoice);
   formData.append("videoStyle", videoStyle);
   formData.append("scriptType", scriptType);
 
   console.log("message", message);
-  console.log("videoFormat", videoFormat);
+  console.log("aspectRatio", aspectRatio);
   console.log("voiceChoice", voiceChoice);
   console.log("videoStyle", videoStyle);
   console.log("scriptType", scriptType);

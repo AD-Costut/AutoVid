@@ -17,8 +17,8 @@ const VideoOptions = ({
   scriptOptionsDisabled,
   playIcon,
   backgroundPresets,
-  videoFormat,
-  setVideoFormat,
+  aspectRatio,
+  setaspectRatio,
   voiceChoice,
   setVoiceChoice,
 }) => {
@@ -112,10 +112,10 @@ const VideoOptions = ({
           <label>
             <input
               type="radio"
-              name="videoFormat"
+              name="aspectRatio"
               value="16:9"
-              checked={videoFormat === "16:9"}
-              onChange={(e) => setVideoFormat(e.target.value)}
+              checked={aspectRatio === "16:9"}
+              onChange={(e) => setaspectRatio(e.target.value)}
               disabled={optionsDisabled}
             />
             16:9
@@ -123,10 +123,10 @@ const VideoOptions = ({
           <label>
             <input
               type="radio"
-              name="videoFormat"
+              name="aspectRatio"
               value="9:16"
-              checked={videoFormat === "9:16"}
-              onChange={(e) => setVideoFormat(e.target.value)}
+              checked={aspectRatio === "9:16"}
+              onChange={(e) => setaspectRatio(e.target.value)}
               disabled={optionsDisabled}
             />
             9:16 (Shorts)
