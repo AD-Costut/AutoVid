@@ -79,6 +79,7 @@ export default function PromptToVideo() {
   }, [messages]);
 
   const handleSend = async () => {
+    setOptionsDisabled(true);
     let fileToSend = null;
 
     if (isLoading) return;
