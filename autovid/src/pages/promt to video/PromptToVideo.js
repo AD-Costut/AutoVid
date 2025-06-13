@@ -50,6 +50,7 @@ export default function PromptToVideo() {
 
   const [aspectRatio, setaspectRatio] = useState("16:9");
   const [voiceChoice, setVoiceChoice] = useState(Object.keys(tiktokVoices)[0]);
+  const [isLandscape, setIsLandscape] = useState(true);
 
   const [selectedVideoType, setSelectedVideoType] = useState("");
 
@@ -260,6 +261,22 @@ export default function PromptToVideo() {
     setBackground(fileUrl);
     setIsPreset(false);
     setSelectedBackground("upload");
+
+    if (isReddit) {
+      const video = document.createElement("video");
+      video.src = fileUrl;
+      video.onloadedmetadata = () => {
+        const landscape = video.videoWidth >= video.videoHeight;
+        setIsLandscape(landscape);
+      };
+    } else if (isQuiz) {
+      const img = new Image();
+      img.src = fileUrl;
+      img.onload = () => {
+        const landscape = img.naturalWidth >= img.naturalHeight;
+        setIsLandscape(landscape);
+      };
+    }
   };
 
   const handleEnter = async (e) => {
@@ -322,6 +339,7 @@ export default function PromptToVideo() {
     }
   }, []);
   const isPortrait = aspectRatio === "9:16";
+
   const [isLoading, setIsLoading] = useState(false);
 
   return (
@@ -392,6 +410,7 @@ export default function PromptToVideo() {
                       voiceChoice={voiceChoice}
                       setVoiceChoice={setVoiceChoice}
                       setaspectRatio={setaspectRatio}
+                      isLandscape={isLandscape}
                     />
                   )}
                 </div>

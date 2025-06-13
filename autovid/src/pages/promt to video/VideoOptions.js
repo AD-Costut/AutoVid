@@ -21,6 +21,7 @@ const VideoOptions = ({
   setaspectRatio,
   voiceChoice,
   setVoiceChoice,
+  isLandscape,
 }) => {
   return (
     <div className="videoOptions">
@@ -68,7 +69,12 @@ const VideoOptions = ({
                 htmlFor="backgroundUpload"
               >
                 Or upload a{" "}
-                {selectedOption === "Reddit Story" ? "video" : "image"}:
+                {selectedOption === "Reddit Story"
+                  ? "Video"
+                  : selectedOption === "Quiz"
+                  ? "Image"
+                  : "File"}
+                :
               </label>
               <input
                 className="input-file"
@@ -77,7 +83,9 @@ const VideoOptions = ({
                 accept={
                   selectedOption === "Reddit Story"
                     ? "video/mp4,video/webm,video/quicktime"
-                    : ".jpg, .jpeg, .png"
+                    : selectedOption === "Quiz"
+                    ? ".jpg, .jpeg, .png"
+                    : ""
                 }
                 onChange={handleBackgroundUpload}
                 disabled={optionsDisabled}
@@ -85,24 +93,45 @@ const VideoOptions = ({
             </div>
           </div>{" "}
           <div className="imageVideoSelected">
-            <div className="backgroundPreview">
-              {background && selectedOption === "Reddit Story" ? (
-                <video
-                  className="preview-video"
-                  src={background}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                />
-              ) : background ? (
-                <img
-                  className="preview-img"
-                  src={background}
-                  alt="Background preview"
-                />
-              ) : null}
-            </div>
+            {background && selectedOption === "Reddit Story" ? (
+              <video
+                className="preview-video"
+                src={background}
+                autoPlay
+                loop
+                muted
+                playsInline
+                controls
+                style={
+                  isLandscape
+                    ? {
+                        width: "17.5rem",
+                        borderRadius: "8px",
+                      }
+                    : {
+                        maxWidth: "7rem",
+                        borderRadius: "8px",
+                      }
+                }
+              />
+            ) : background && selectedOption === "Quiz" ? (
+              <img
+                className="preview-img"
+                src={background}
+                alt="Background preview"
+                style={
+                  isLandscape
+                    ? {
+                        width: "17.5rem",
+                        borderRadius: "8px",
+                      }
+                    : {
+                        maxWidth: "8.5rem",
+                        borderRadius: "8px",
+                      }
+                }
+              />
+            ) : null}
           </div>
         </div>
       )}

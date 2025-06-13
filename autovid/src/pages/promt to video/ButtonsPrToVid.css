@@ -201,16 +201,6 @@ select:disabled {
   align-items: center;
 }
 
-.preview-video {
-  width: 17.5rem;
-  border-radius: 8px;
-}
-
-.preview-img {
-  width: 17.5rem;
-  border-radius: 8px;
-}
-
 .charCount {
   font-size: 1.75rem;
   margin: 4px;
