@@ -20,7 +20,7 @@ import Video1 from "../pages videos/Rotating Earth.mp4";
 import Video2 from "../pages videos/Light Game.mp4";
 import Image1 from "../pages photos/Rotating Earth.jpg";
 import Image2 from "../pages photos/Light Game.jpg";
-import { tiktokVoices } from "./TextToSpeech";
+import { googleVoices } from "./TextToSpeech";
 
 export default function PromptToVideo() {
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ export default function PromptToVideo() {
   const chatEnd = useRef(null);
   const [input, setInput] = useState("");
   const [selectedScriptType, setSelectedScriptType] = useState("");
-  const INPUT_CHAR_LIMIT = selectedScriptType === "User Script" ? 300 : 250;
+  const INPUT_CHAR_LIMIT = selectedScriptType === "User Script" ? 4500 : 250;
 
   const [optionsDisabled, setOptionsDisabled] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
@@ -49,7 +49,7 @@ export default function PromptToVideo() {
   const [selectedBackground, setSelectedBackground] = useState(null);
 
   const [aspectRatio, setaspectRatio] = useState("16:9");
-  const [voiceChoice, setVoiceChoice] = useState(Object.keys(tiktokVoices)[0]);
+  const [voiceChoice, setVoiceChoice] = useState(Object.keys(googleVoices)[0]);
   const [isLandscape, setIsLandscape] = useState(true);
 
   const [selectedVideoType, setSelectedVideoType] = useState("");
@@ -106,7 +106,7 @@ export default function PromptToVideo() {
       let finalPrompt = "";
 
       if (selectedVideoType === "Quiz") {
-        finalPrompt = `Make a quiz script about: "${input}" for a YouTube video.
+        finalPrompt = `Make 10 quiz questions script about: "${input}" for a YouTube video.
 
       Start with a clear title for the quiz enclosed in &^& markers, like this:
       &&[Title]&&
@@ -115,20 +115,29 @@ export default function PromptToVideo() {
 
       First, read the input and extract the main idea or topic in a short phrase or few words.
 
-      The quiz script should start with:
-      Welcome to today's 2 quizzez about [main idea extracted from the input].
+      The quiz script should start with something like:
+      Welcome to today's quiz about the topic
 
-      &&[Clear Quiz Title]&&
-
-      Then write exactly 2 questions and answers in this format:
+      Then write exactly 10 questions and answers in this format:
       ##
-      [Short Question1 text]
-      [Short Answer1 text]
+      [1. Short Question1 text]
+      [A. ]
+      [B. ]
+      [C. ]
+      Corect Answear [ .]
 
-      [Short Question2 text]
-      [Short Answer2 text]
+      [2. Short Question2 text]
+      [A. ]
+      [B. ]
+      [C. ]
+      ...
+      [10. Short Question10 text]
+      [A. ]
+      [B. ]
+      [C. ]
+      Corect Answear [ .]
       ##
-      300 characters max
+      4500 characters max
       Do NOT include any narrator labels, parentheses, comments, or extra delimiters.`;
       } else if (selectedVideoType === "Slide Show") {
         finalPrompt = `Make a YouTube slideshow narration script about: "${input}" for a youtube video.
@@ -144,11 +153,10 @@ export default function PromptToVideo() {
 
       Example output format:
 
-      &&[Clear Title]&&
       ##
       [Pure narration script here...]
       ##
-      300 characters max`;
+      1500 characters max`;
       } else if (selectedVideoType === "Reddit Story") {
         finalPrompt = `Create a Reddit-style story script based on: "${input}" for a YouTube video.
 
@@ -161,11 +169,10 @@ export default function PromptToVideo() {
 
       Example output format:
 
-      &&[Story Title]&&
       ##
       [Story text here...]
       ##
-      300 characters max`;
+      4500 characters max`;
       }
 
       const res = await sendMessageToAi(

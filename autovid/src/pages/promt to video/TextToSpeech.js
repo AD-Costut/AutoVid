@@ -1,6 +1,6 @@
 export function textToSpeech(selectElem, buttonElem, textareaElem) {
   selectElem.innerHTML = "";
-  Object.entries(tiktokVoices).forEach(([voiceKey, voiceLabel], i) => {
+  Object.entries(googleVoices).forEach(([voiceKey, voiceLabel], i) => {
     selectElem.options[i] = new Option(voiceLabel, voiceKey);
   });
 
@@ -15,16 +15,25 @@ export function textToSpeech(selectElem, buttonElem, textareaElem) {
 
     try {
       const response = await fetch(
-        "https://tiktok-tts.weilnet.workers.dev/api/generation",
+        "https://texttospeech.googleapis.com/v1/text:synthesize?key=AIzaSyAVF_TqCTtO_-rbD5eb97RfEYBkj426WFw",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ text, voice }),
+          body: JSON.stringify({
+            input: { text },
+            voice: {
+              languageCode: "en-US",
+              name: voice,
+            },
+            audioConfig: {
+              audioEncoding: "MP3",
+            },
+          }),
         }
       );
 
       const data = await response.json();
-      const base64Audio = data.data;
+      const base64Audio = data.audioContent;
 
       if (!base64Audio) {
         alert("Failed to generate audio.");
@@ -34,16 +43,15 @@ export function textToSpeech(selectElem, buttonElem, textareaElem) {
       const audio = new Audio("data:audio/mp3;base64," + base64Audio);
       audio.play();
     } catch (err) {
-      console.error("Error generating TikTok TTS:", err);
+      console.error("Error generating Google TTS:", err);
       alert("Error generating TTS. Check console for details.");
     }
   };
 }
 
-export const tiktokVoices = {
-  en_us_001: "Female (Classic)",
-  en_us_006: "Male (Energetic)",
-  en_us_007: "Male (Calm)",
-  en_us_009: "Female (Warm)",
-  en_us_010: "Female (Bright)",
+export const googleVoices = {
+  "en-US-Wavenet-F": "Female (Wavenet F)",
+  "en-US-Wavenet-D": "Male (Wavenet D)",
+  "en-US-Neural2-J": "Male (Neural2 J)",
+  "en-US-Neural2-F": "Female (Neural2 F)",
 };

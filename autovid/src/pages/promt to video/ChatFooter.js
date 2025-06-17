@@ -53,7 +53,7 @@ const ChatFooter = ({
             !input.trim() ||
             aiResponseDone ||
             isLoading ||
-            (selectedScriptType == "Slide Show" &&
+            (selectedScriptType === "Slide Show" &&
               !uploadedFile &&
               !selectedBackground)
           }

@@ -1,4 +1,4 @@
-import { tiktokVoices } from "./TextToSpeech";
+import { googleVoices } from "./TextToSpeech";
 
 const VideoOptions = ({
   selectedOption,
@@ -167,10 +167,10 @@ const VideoOptions = ({
           className="voicesDropdown"
           ref={voiceSelectRef}
           disabled={optionsDisabled}
-          value={voiceChoice ?? Object.keys(tiktokVoices)[0] ?? ""}
+          value={voiceChoice ?? Object.keys(googleVoices)[0] ?? ""}
           onChange={(e) => setVoiceChoice(e.target.value)}
         >
-          {Object.entries(tiktokVoices).map(([key, label]) => (
+          {Object.entries(googleVoices).map(([key, label]) => (
             <option key={key} value={key}>
               {label}
             </option>
