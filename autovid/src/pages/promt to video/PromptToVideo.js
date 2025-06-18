@@ -53,6 +53,8 @@ export default function PromptToVideo() {
   const [voiceChoice, setVoiceChoice] = useState(Object.keys(googleVoices)[0]);
   const [isLandscape, setIsLandscape] = useState(true);
 
+  const [AddLoadingMessage, setAddLoadingMessage] = useState(false);
+
   const [selectedVideoType, setSelectedVideoType] = useState("");
 
   async function urlToFile(url, filename, mimeType) {
@@ -81,9 +83,10 @@ export default function PromptToVideo() {
     setOptionsDisabled(true);
     let fileToSend = null;
 
-    if (isLoading) return;
+    if (isLoading || !input.trim() || input.length > INPUT_CHAR_LIMIT) return;
 
     setIsLoading(true);
+
     if (!isPreset && uploadedFile) {
       fileToSend = uploadedFile;
     } else if (isPreset && background) {
@@ -97,9 +100,12 @@ export default function PromptToVideo() {
 
       fileToSend = await urlToFile(background, `preset.${extension}`, mimeType);
     }
-    if (!input.trim() || input.length > INPUT_CHAR_LIMIT) return;
 
-    setMessages((prev) => [...prev, { text: input, isBot: false }]);
+    setMessages((prev) => [
+      ...prev,
+      { text: input, isBot: false },
+      { isBot: true, isVideoLoading: true, text: null },
+    ]);
 
     if (selectedScriptType === "AI Script") {
       let finalPrompt = "";
@@ -109,12 +115,12 @@ export default function PromptToVideo() {
 
         Start with a clear title for the quiz enclosed in && markers, like this:
         &&[Title]&&
-
+        
         Then write the entire quiz script inside a single pair of ## delimiters.
-
+        
         The quiz script should start with something like:
         Welcome to today's quiz about the topic.
-
+        
         Then write exactly 5 questions and answers in this format:
         ##
         [1. Short Question 1 text]  
@@ -122,15 +128,15 @@ export default function PromptToVideo() {
         [B. ]  
         [C. ]  
         Correct Answear [ .]  
-
+        
         [2. Short Question 2 text]  
         [A. ]  
         [B. ]  
         [C. ]  
         Correct Answear [ .]  
-
+        
         ...  
-
+        
         [5. Short Question 5 text]  
         [A. ]  
         [B. ]  
@@ -141,38 +147,38 @@ export default function PromptToVideo() {
         Do NOT include any narrator labels, parentheses, comments, or extra delimiters.`;
       } else if (selectedVideoType === "Slide Show") {
         finalPrompt = `Make a YouTube slideshow narration script about: "${input}" for a youtube video.
-
-      Start with a clear title enclosed in && markers, like this:
-      &&[Title]&&
-
-      Then write the entire narration script inside a single pair of ## delimiters.
-
-      Write only the narration text to be spoken throughout the slideshow.
-
-      Do NOT include slide notes, timestamps, multiple #%# delimiters, parentheses, or narrator labels.
-
-      Example output format:
-
-      ##
-      [Pure narration script here...]
-      ##
-      1500 characters max`;
+  
+        Start with a clear title enclosed in && markers, like this:
+        &&[Title]&&
+        
+        Then write the entire narration script inside a single pair of ## delimiters.
+        
+        Write only the narration text to be spoken throughout the slideshow.
+        
+        Do NOT include slide notes, timestamps, multiple #%# delimiters, parentheses, or narrator labels.
+        
+        Example output format:
+        
+        ##
+        [Pure narration script here...]
+        ##
+        1500 characters max`;
       } else if (selectedVideoType === "Reddit Story") {
         finalPrompt = `Create a Reddit-style story script based on: "${input}" for a YouTube video.
-
-      Start with a clear and engaging story title enclosed in && markers, like this:
-      &&[Story Title]&&
-
-      Then write the entire story script inside a single pair of ## delimiters.
-
-      Write the story as pure text, without any narrator labels, parentheses, stage directions, or commentary.
-
-      Example output format:
-
-      ##
-      [Story text here...]
-      ##
-      4500 characters max`;
+  
+        Start with a clear and engaging story title enclosed in && markers, like this:
+        &&[Story Title]&&
+        
+        Then write the entire story script inside a single pair of ## delimiters.
+        
+        Write the story as pure text, without any narrator labels, parentheses, stage directions, or commentary.
+        
+        Example output format:
+        
+        ##
+        [Story text here...]
+        ##
+        4500 characters max`;
       }
 
       const res = await sendMessageToAi(
@@ -187,7 +193,15 @@ export default function PromptToVideo() {
         console.error("AI response is undefined!");
         return;
       }
-      setMessages((prev) => [...prev, { text: res, isBot: true }]);
+
+      setMessages((prev) => {
+        const newMessages = [...prev];
+        const loadingIndex = newMessages.findIndex((msg) => msg.isVideoLoading);
+        if (loadingIndex !== -1) {
+          newMessages[loadingIndex] = { text: res, isBot: true };
+        }
+        return newMessages;
+      });
 
       // if (selectedScriptType === "AI Script") {
       //   let finalPrompt = "";
@@ -226,12 +240,21 @@ export default function PromptToVideo() {
         console.error("User prompt undefined");
         return;
       }
-      setMessages((prev) => [...prev, { text: res, isBot: true }]);
+
+      setMessages((prev) => {
+        const newMessages = [...prev];
+        const loadingIndex = newMessages.findIndex((msg) => msg.isVideoLoading);
+        if (loadingIndex !== -1) {
+          newMessages[loadingIndex] = { text: res, isBot: true };
+        }
+        return newMessages;
+      });
     }
 
     setOptionsDisabled(true);
     setAiResponseDone(true);
     setInput("");
+    setIsLoading(false);
   };
 
   const backgroundPresets = {
@@ -379,6 +402,19 @@ export default function PromptToVideo() {
 
   const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    if (AddLoadingMessage) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          isBot: true,
+          isVideoLoading: true,
+          text: null,
+        },
+      ]);
+    }
+  }, [AddLoadingMessage]);
+
   return (
     <div className="promt-to-video">
       <Sidebar
@@ -407,6 +443,14 @@ export default function PromptToVideo() {
                 <div>
                   {typeof message.text === "string" ? (
                     <p className="txt">{message.text}</p>
+                  ) : message.isVideoLoading ||
+                    (message.text && !message.text.videoUrl) ? (
+                    <div className="videoLoading">
+                      <div className="spinner" />
+                      <p>🎬 Video in the making...</p>
+                      <p>Please wait...</p>
+                      <p>It might take a while... ⏳</p>
+                    </div>
                   ) : message.text && message.text.videoUrl ? (
                     <video
                       src={
