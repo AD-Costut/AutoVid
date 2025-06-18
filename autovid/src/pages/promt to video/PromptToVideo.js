@@ -22,6 +22,7 @@ import Image1 from "../pages photos/Rotating Earth.jpg";
 import Image2 from "../pages photos/Light Game.jpg";
 import { googleVoices } from "./TextToSpeech";
 import { Filter } from "bad-words";
+import LoadingMessages from "../promt to video/LoadingVideoMessages";
 
 export default function PromptToVideo() {
   const navigate = useNavigate();
@@ -445,12 +446,7 @@ export default function PromptToVideo() {
                     <p className="txt">{message.text}</p>
                   ) : message.isVideoLoading ||
                     (message.text && !message.text.videoUrl) ? (
-                    <div className="videoLoading">
-                      <div className="spinner" />
-                      <p>🎬 Video in the making...</p>
-                      <p>Please wait...</p>
-                      <p>It might take a while... ⏳</p>
-                    </div>
+                    <LoadingMessages />
                   ) : message.text && message.text.videoUrl ? (
                     <video
                       src={

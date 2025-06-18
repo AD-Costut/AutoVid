@@ -268,20 +268,37 @@ p {
   border: 1px #ccc;
   border-radius: 8px;
   background-color: #b7b8c1;
+  width: 30rem;
 }
 
 .spinner {
-  width: 50px;
-  height: 50px;
+  width: 100px;
+  height: 100px;
   margin-bottom: 10px;
   border: 5px solid rgba(0, 0, 0, 0.1);
   border-top: 5px solid #4a90e2;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  animation: spin 1.5s linear infinite;
 }
 
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+.dots {
+  display: inline-block;
+  animation: bounceDots 1s ease-in-out infinite alternate;
+  position: relative;
+  top: 0;
+}
+
+@keyframes bounceDots {
+  0%,
+  100% {
+    top: 0;
+  }
+  50% {
+    top: -0.5px;
   }
 }
