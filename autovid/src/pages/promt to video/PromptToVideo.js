@@ -368,9 +368,58 @@ export default function PromptToVideo() {
     navigate("/login");
   };
 
+  useEffect(() => {
+    if (!Array.isArray(messages) || messages.length === 0) return;
+
+    const lastUserMessage = messages
+      .slice()
+      .reverse()
+      .find((msg) => !msg.isBot && typeof msg.text === "string");
+
+    if (!lastUserMessage) return;
+
+    const now = new Date();
+
+    const day = now.getDate().toString().padStart(2, "0");
+    const month = (now.getMonth() + 1).toString().padStart(2, "0");
+    const year = now.getFullYear().toString().slice(-2);
+    const dateStr = `${day}.${month}.${year}`;
+    const timeStr = now.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+
+    const dateTimeStr = `${dateStr} ${timeStr}`;
+
+    let snippet = lastUserMessage.text;
+    if (snippet.length > 15) {
+      snippet = snippet.substring(0, 15) + "...";
+    }
+
+    setVideoList((prevList) => {
+      if (prevList.length === 0) {
+        return [`${snippet} (${dateTimeStr})`];
+      }
+
+      const updatedList = [...prevList];
+      updatedList[0] = `${snippet} (${dateTimeStr})`;
+      return updatedList;
+    });
+  }, [messages]);
+
   const handleNewVideo = () => {
-    const newLabel = `Untitled ${videoList.length + 1}`;
-    setVideoList([...videoList, newLabel]);
+    setVideoList((prevList) => {
+      if (prevList.length === 0) {
+        return [`Untitled 1`];
+      }
+
+      if (prevList[0].startsWith("Untitled")) {
+        return prevList;
+      }
+
+      return [`Untitled`, ...prevList];
+    });
   };
 
   useEffect(() => {
