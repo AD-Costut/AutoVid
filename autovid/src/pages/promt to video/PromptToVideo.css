@@ -249,3 +249,10 @@ p {
 .listItems logoutButton {
   cursor: pointer;
 }
+
+.profanityWarning {
+  display: flex;
+  align-items: center;
+  color: red;
+  font-size: 1.5rem;
+}

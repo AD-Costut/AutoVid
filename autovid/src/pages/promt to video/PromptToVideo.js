@@ -21,6 +21,7 @@ import Video2 from "../pages videos/Light Game.mp4";
 import Image1 from "../pages photos/Rotating Earth.jpg";
 import Image2 from "../pages photos/Light Game.jpg";
 import { googleVoices } from "./TextToSpeech";
+import { Filter } from "bad-words";
 
 export default function PromptToVideo() {
   const navigate = useNavigate();
@@ -72,6 +73,9 @@ export default function PromptToVideo() {
     },
   ]);
 
+  const filter = new Filter();
+  const hasProfanity = filter.isProfane(input);
+
   useEffect(() => {
     if (chatEnd.current) {
       chatEnd.current.scrollTop = chatEnd.current.scrollHeight;
@@ -106,39 +110,40 @@ export default function PromptToVideo() {
       let finalPrompt = "";
 
       if (selectedVideoType === "Quiz") {
-        finalPrompt = `Make 10 quiz questions script about: "${input}" for a YouTube video.
+        finalPrompt = `Make 5 questions quiz script about: "${input}".
 
-      Start with a clear title for the quiz enclosed in &^& markers, like this:
-      &&[Title]&&
+        Start with a clear title for the quiz enclosed in && markers, like this:
+        &&[Title]&&
 
-      Then write the entire quiz script inside a single pair of ## delimiters.
+        Then write the entire quiz script inside a single pair of ## delimiters.
 
-      First, read the input and extract the main idea or topic in a short phrase or few words.
+        The quiz script should start with something like:
+        Welcome to today's quiz about the topic.
 
-      The quiz script should start with something like:
-      Welcome to today's quiz about the topic
+        Then write exactly 5 questions and answers in this format:
+        ##
+        [1. Short Question 1 text]  
+        [A. ]  
+        [B. ]  
+        [C. ]  
+        Correct Answear [ .]  
 
-      Then write exactly 10 questions and answers in this format:
-      ##
-      [1. Short Question1 text]
-      [A. ]
-      [B. ]
-      [C. ]
-      Corect Answear [ .]
+        [2. Short Question 2 text]  
+        [A. ]  
+        [B. ]  
+        [C. ]  
+        Correct Answear [ .]  
 
-      [2. Short Question2 text]
-      [A. ]
-      [B. ]
-      [C. ]
-      ...
-      [10. Short Question10 text]
-      [A. ]
-      [B. ]
-      [C. ]
-      Corect Answear [ .]
-      ##
-      4500 characters max
-      Do NOT include any narrator labels, parentheses, comments, or extra delimiters.`;
+        ...  
+
+        [5. Short Question 5 text]  
+        [A. ]  
+        [B. ]  
+        [C. ]  
+        Correct Answear [ .]  
+        ##
+        4500 characters max
+        Do NOT include any narrator labels, parentheses, comments, or extra delimiters.`;
       } else if (selectedVideoType === "Slide Show") {
         finalPrompt = `Make a YouTube slideshow narration script about: "${input}" for a youtube video.
 
@@ -316,6 +321,10 @@ export default function PromptToVideo() {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
 
+      if (filter.isProfane(input)) {
+        return;
+      }
+
       if (
         (!background &&
           (selectedOption === "Quiz" || selectedOption === "Reddit Story")) ||
@@ -465,6 +474,8 @@ export default function PromptToVideo() {
           selectedBackground={selectedBackground}
           sendButton={sendButton}
           isLoading={isLoading}
+          Filter={Filter}
+          hasProfanity={hasProfanity}
         />
       </div>
     </div>

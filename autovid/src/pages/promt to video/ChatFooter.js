@@ -13,6 +13,7 @@ const ChatFooter = ({
   selectedBackground,
   sendButton,
   isLoading,
+  hasProfanity,
 }) => {
   return (
     <div className="chatFooter">
@@ -42,6 +43,12 @@ const ChatFooter = ({
           </p>
         )}
 
+        {hasProfanity && (
+          <div className="profanityWarning">
+            Please remove inappropriate language submitting your message.
+          </div>
+        )}
+
         <button
           className="send"
           onClick={handleSend}
@@ -53,6 +60,7 @@ const ChatFooter = ({
             !input.trim() ||
             aiResponseDone ||
             isLoading ||
+            hasProfanity ||
             (selectedScriptType === "Slide Show" &&
               !uploadedFile &&
               !selectedBackground)
