@@ -1,3 +1,5 @@
+import React, { useEffect } from "react";
+
 const Sidebar = ({
   handleNewVideo,
   addButton,
@@ -6,6 +8,10 @@ const Sidebar = ({
   handleLogout,
   logOut,
 }) => {
+  useEffect(() => {
+    handleNewVideo();
+  }, []);
+
   return (
     <div className="sideBar">
       <div className="upperSide">

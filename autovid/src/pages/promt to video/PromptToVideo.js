@@ -60,11 +60,6 @@ export default function PromptToVideo() {
     const blob = await res.blob();
     return new File([blob], filename, { type: mimeType });
   }
-  async function urlToFile(url, filename, mimeType) {
-    const res = await fetch(url);
-    const blob = await res.blob();
-    return new File([blob], filename, { type: mimeType });
-  }
 
   const [messages, setMessages] = useState([
     {

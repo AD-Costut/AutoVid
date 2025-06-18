@@ -45,7 +45,7 @@ const ChatFooter = ({
 
         {hasProfanity && (
           <div className="profanityWarning">
-            Please remove inappropriate language submitting your message.
+            Please remove inappropriate language before submitting your message.
           </div>
         )}
 
