@@ -50,8 +50,10 @@ export function textToSpeech(selectElem, buttonElem, textareaElem) {
 }
 
 export const googleVoices = {
-  "en-US-Wavenet-F": "Female (Wavenet F)",
-  "en-US-Wavenet-D": "Male (Wavenet D)",
-  "en-US-Neural2-J": "Male (Neural2 J)",
-  "en-US-Neural2-F": "Female (Neural2 F)",
+  "en-US-Wavenet-F": "English Female (Wavenet F)",
+  "en-US-Wavenet-D": "English Male (Wavenet D)",
+  "en-US-Neural2-J": "English Male (Neural2 J)",
+  "en-US-Neural2-F": "English Female (Neural2 F)",
+  // "ro-RO-Wavenet-A": "Romanian Male (Wavenet A)",
+  // "ro-RO-Wavenet-B": "Romanian Female (Wavenet B)",
 };
