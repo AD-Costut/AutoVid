@@ -7,6 +7,7 @@ const Sidebar = ({
   messageIcon,
   handleLogout,
   logOut,
+  isVideoReady,
 }) => {
   useEffect(() => {
     handleNewVideo();
@@ -20,18 +21,33 @@ const Sidebar = ({
           <img src="/TemporaryLogo.jpg" alt="TemporaryLogo" className="logo" />
         </div>
         <button
-          className="midButton"
+          className={`midButton ${!isVideoReady ? "locked" : ""}`}
           onClick={() => {
+            if (!isVideoReady) return;
             handleNewVideo();
-            // window.location.reload();
           }}
+          disabled={!isVideoReady}
+          title={
+            !isVideoReady
+              ? "Please wait for the video to finish generating."
+              : ""
+          }
         >
           <img src={addButton} alt="new video" className="addButton" />
           New Video
         </button>
+
         <div className="upperSideButton">
           {videoList.map((label, index) => (
-            <button key={index} className="query">
+            <button
+              key={index}
+              className="query"
+              onClick={() => {
+                if (label.toLowerCase() === "untitled") {
+                  window.location.reload();
+                }
+              }}
+            >
               <img src={messageIcon} alt="Query" />
               {label}
             </button>

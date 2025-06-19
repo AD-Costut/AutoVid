@@ -302,3 +302,9 @@ p {
     top: -0.5px;
   }
 }
+
+.locked {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: auto;
+}

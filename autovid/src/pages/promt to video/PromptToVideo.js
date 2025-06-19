@@ -58,6 +58,9 @@ export default function PromptToVideo() {
 
   const [selectedVideoType, setSelectedVideoType] = useState("");
 
+  const [message, setMessage] = useState(null);
+  const [isVideoReady, setIsVideoReady] = useState(false);
+
   async function urlToFile(url, filename, mimeType) {
     const res = await fetch(url);
     const blob = await res.blob();
@@ -295,6 +298,10 @@ export default function PromptToVideo() {
     }
   };
 
+  useEffect(() => {
+    setIsVideoReady(false);
+  }, [message]);
+
   const handleBackgroundUpload = (event) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -409,9 +416,11 @@ export default function PromptToVideo() {
   }, [messages]);
 
   const handleNewVideo = () => {
+    setIsVideoReady(false);
+
     setVideoList((prevList) => {
       if (prevList.length === 0) {
-        return [`Untitled 1`];
+        return [`Untitled`];
       }
 
       if (prevList[0].startsWith("Untitled")) {
@@ -474,6 +483,7 @@ export default function PromptToVideo() {
         messageIcon={messageIcon}
         handleLogout={handleLogout}
         logOut={logOut}
+        isVideoReady={isVideoReady}
       />
       <div className="main">
         <div className="chats" ref={chatEnd}>
@@ -508,6 +518,8 @@ export default function PromptToVideo() {
                         maxWidth: isPortrait ? "35%" : "100%",
                         borderRadius: "8px",
                       }}
+                      onCanPlay={() => setIsVideoReady(true)}
+                      onError={() => setIsVideoReady(false)}
                     />
                   ) : (
                     <p className="txt">Unsupported message format</p>
