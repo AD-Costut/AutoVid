@@ -14,14 +14,14 @@ export async function sendMessageToAi(
   formData.append("voiceChoice", voiceChoice);
   formData.append("videoStyle", videoStyle);
   formData.append("scriptType", scriptType);
-  formData.append("label", completedLabel);
+  formData.append("completedLabel", completedLabel);
 
   console.log("message", message);
   console.log("aspectRatio", aspectRatio);
   console.log("voiceChoice", voiceChoice);
   console.log("videoStyle", videoStyle);
   console.log("scriptType", scriptType);
-  console.log("label", completedLabel);
+  console.log("comletedLabel", completedLabel);
 
   if (file) {
     formData.append("file", file);
