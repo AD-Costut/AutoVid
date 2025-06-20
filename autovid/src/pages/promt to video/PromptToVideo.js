@@ -61,6 +61,8 @@ export default function PromptToVideo() {
   const [message, setMessage] = useState(null);
   const [isVideoReady, setIsVideoReady] = useState(false);
 
+  const [completedLabel, setCompletedLabel] = useState("");
+
   async function urlToFile(url, filename, mimeType) {
     const res = await fetch(url);
     const blob = await res.blob();
@@ -90,6 +92,37 @@ export default function PromptToVideo() {
     if (isLoading || !input.trim() || input.length > INPUT_CHAR_LIMIT) return;
 
     setIsLoading(true);
+
+    const now = new Date();
+
+    const day = now.getDate().toString().padStart(2, "0");
+    const month = (now.getMonth() + 1).toString().padStart(2, "0");
+    const year = now.getFullYear().toString().slice(-2);
+    const dateStr = `${day}.${month}.${year}`;
+    const timeStr = now.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+    const dateTimeStr = `${dateStr} ${timeStr}`;
+
+    let snippet = input;
+    if (snippet.length > 15) {
+      snippet = snippet.substring(0, 15) + "...";
+    }
+
+    const completedLabel = `${snippet} (${dateTimeStr})`;
+
+    setVideoList((prevList) => {
+      if (prevList.length === 0) {
+        return [completedLabel];
+      }
+      const updatedList = [...prevList];
+      updatedList[0] = completedLabel;
+      return updatedList;
+    });
+
+    setCompletedLabel(completedLabel);
 
     if (!isPreset && uploadedFile) {
       fileToSend = uploadedFile;
@@ -191,7 +224,8 @@ export default function PromptToVideo() {
         voiceChoice,
         fileToSend,
         selectedVideoType,
-        selectedScriptType
+        selectedScriptType,
+        completedLabel
       );
       if (!res) {
         console.error("AI response is undefined!");
@@ -238,7 +272,8 @@ export default function PromptToVideo() {
         voiceChoice,
         fileToSend,
         selectedVideoType,
-        selectedScriptType
+        selectedScriptType,
+        completedLabel
       );
       if (!res) {
         console.error("User prompt undefined");
@@ -374,46 +409,6 @@ export default function PromptToVideo() {
     sessionStorage.clear();
     navigate("/login");
   };
-
-  useEffect(() => {
-    if (!Array.isArray(messages) || messages.length === 0) return;
-
-    const lastUserMessage = messages
-      .slice()
-      .reverse()
-      .find((msg) => !msg.isBot && typeof msg.text === "string");
-
-    if (!lastUserMessage) return;
-
-    const now = new Date();
-
-    const day = now.getDate().toString().padStart(2, "0");
-    const month = (now.getMonth() + 1).toString().padStart(2, "0");
-    const year = now.getFullYear().toString().slice(-2);
-    const dateStr = `${day}.${month}.${year}`;
-    const timeStr = now.toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    });
-
-    const dateTimeStr = `${dateStr} ${timeStr}`;
-
-    let snippet = lastUserMessage.text;
-    if (snippet.length > 15) {
-      snippet = snippet.substring(0, 15) + "...";
-    }
-
-    setVideoList((prevList) => {
-      if (prevList.length === 0) {
-        return [`${snippet} (${dateTimeStr})`];
-      }
-
-      const updatedList = [...prevList];
-      updatedList[0] = `${snippet} (${dateTimeStr})`;
-      return updatedList;
-    });
-  }, [messages]);
 
   const handleNewVideo = () => {
     setIsVideoReady(false);
