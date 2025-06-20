@@ -71,8 +71,15 @@ const Login = () => {
         const result = await backendResponse.json();
 
         if (backendResponse.ok) {
-          localStorage.setItem("accessToken", tokenResponse.access_token);
-          localStorage.setItem("user", JSON.stringify(userData));
+          localStorage.setItem("accessToken", result.token);
+          localStorage.setItem(
+            "user",
+            JSON.stringify({
+              userId: result.userId,
+              email: result.user.email,
+              name: result.user.name,
+            })
+          );
           navigate("/promt-to-video");
         } else {
           console.error("Backend login failed:", result.error);
@@ -138,6 +145,12 @@ const Login = () => {
       })
       .then((data) => {
         localStorage.setItem("accessToken", data.token);
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            userId: data.userId,
+          })
+        );
         redirectToChatPage();
       })
       .catch((error) => {

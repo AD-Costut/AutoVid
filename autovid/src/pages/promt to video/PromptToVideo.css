@@ -191,6 +191,7 @@ button:hover {
 .send {
   background: transparent;
   border: none;
+  margin-left: 2px;
 }
 
 .send:disabled {
@@ -251,10 +252,16 @@ p {
 }
 
 .profanityWarning {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   color: red;
-  font-size: 1.5rem;
+  font-size: 1.175rem;
+  background: #ffdd0a;
+  margin: auto;
+  border-radius: 2px;
+  font-weight: bold;
+  padding: 10px 0 10px 5px;
+  margin-right: 0;
 }
 
 .videoLoading {

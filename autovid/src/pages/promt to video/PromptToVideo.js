@@ -76,6 +76,16 @@ export default function PromptToVideo() {
     },
   ]);
 
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    const userString = localStorage.getItem("user");
+    if (userString) {
+      const user = JSON.parse(userString);
+      if (user.userId) setUserId(user.userId);
+    }
+  }, []);
+
   const filter = new Filter();
   const hasProfanity = filter.isProfane(input);
 
@@ -107,8 +117,8 @@ export default function PromptToVideo() {
     const dateTimeStr = `${dateStr} ${timeStr}`;
 
     let snippet = input;
-    if (snippet.length > 15) {
-      snippet = snippet.substring(0, 15) + "...";
+    if (snippet.length > 10) {
+      snippet = snippet.substring(0, 10) + "...";
     }
 
     const completedLabel = `${snippet} (${dateTimeStr})`;
@@ -479,6 +489,8 @@ export default function PromptToVideo() {
         handleLogout={handleLogout}
         logOut={logOut}
         isVideoReady={isVideoReady}
+        userId={userId}
+        setVideoList={setVideoList}
       />
       <div className="main">
         <div className="chats" ref={chatEnd}>

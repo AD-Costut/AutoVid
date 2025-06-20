@@ -1,17 +1,41 @@
 import React, { useEffect } from "react";
+import axios from "axios";
 
 const Sidebar = ({
   handleNewVideo,
   addButton,
   videoList,
+  setVideoList,
   messageIcon,
   handleLogout,
   logOut,
   isVideoReady,
+  userId,
 }) => {
   useEffect(() => {
-    handleNewVideo();
-  }, []);
+    if (!userId) return;
+
+    const fetchLabels = async () => {
+      console.log("Fetching for userId:", userId);
+
+      try {
+        const res = await axios.get(
+          `http://localhost:5000/api/chatHistory/${userId}`
+        );
+        const completedLabels = res.data
+          .map((item) => item.completedLabel)
+          .filter((completedLabel) => completedLabel);
+
+        setVideoList(completedLabels);
+        handleNewVideo();
+      } catch (err) {
+        console.error("Error fetching labels", err);
+        handleNewVideo();
+      }
+    };
+
+    fetchLabels();
+  }, [userId]);
 
   return (
     <div className="sideBar">
@@ -25,6 +49,7 @@ const Sidebar = ({
           onClick={() => {
             if (!isVideoReady) return;
             handleNewVideo();
+            window.location.reload();
           }}
           disabled={!isVideoReady}
           title={
@@ -44,7 +69,7 @@ const Sidebar = ({
               className="query"
               onClick={() => {
                 if (label.toLowerCase() === "untitled") {
-                  window.location.reload();
+                  // window.location.reload();
                 }
               }}
             >

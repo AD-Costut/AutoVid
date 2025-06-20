@@ -207,4 +207,5 @@ select:disabled {
   display: flex;
   align-items: center;
   width: 5rem;
+  margin: 0.5rem;
 }
