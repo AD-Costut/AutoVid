@@ -27,9 +27,14 @@ export async function sendMessageToAi(
     formData.append("file", file);
   }
 
+  const token = localStorage.getItem("accessToken");
+
   try {
     const response = await fetch("http://localhost:5000/chat/completions", {
       method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       body: formData,
     });
 
