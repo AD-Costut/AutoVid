@@ -23,19 +23,21 @@ import Image2 from "../pages photos/Light Game.jpg";
 import { googleVoices } from "./TextToSpeech";
 import { Filter } from "bad-words";
 import LoadingMessages from "../promt to video/LoadingVideoMessages";
+import axios from "axios";
 
 export default function PromptToVideo() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [videoList, setVideoList] = useState([]);
-
+  const [chatLabel, setChatLabel] = useState("Untitled");
   const chatEnd = useRef(null);
   const [input, setInput] = useState("");
   const [selectedScriptType, setSelectedScriptType] = useState("");
   const INPUT_CHAR_LIMIT = selectedScriptType === "User Script" ? 4500 : 250;
-
+  const [videoUrl, setVideoUrl] = useState([]);
   const [optionsDisabled, setOptionsDisabled] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
+  const [ChatIds, setChatIds] = useState([]);
 
   const [scriptOptionsDisabled, setScriptOptionsDisabled] = useState(false);
 
@@ -49,7 +51,7 @@ export default function PromptToVideo() {
   const [uploadedFile, setUploadedFile] = useState(null);
   const [isPreset, setIsPreset] = useState(true);
   const [selectedBackground, setSelectedBackground] = useState(null);
-
+  const [userMessage, setUserMessage] = useState([]);
   const [aspectRatio, setaspectRatio] = useState("16:9");
   const [voiceChoice, setVoiceChoice] = useState(Object.keys(googleVoices)[0]);
   const [isLandscape, setIsLandscape] = useState(true);
@@ -479,6 +481,68 @@ export default function PromptToVideo() {
     }
   }, [AddLoadingMessage]);
 
+  useEffect(() => {
+    if (!userId) return;
+
+    const fetchLabels = async () => {
+      console.log("Fetching for userId:", userId);
+
+      try {
+        const res = await axios.get(
+          `http://localhost:5000/api/chatHistory/${userId}`
+        );
+        console.log("Response received:", res);
+
+        if (!res.data) {
+          console.warn("res.data is undefined or null!");
+          return;
+        }
+        if (!Array.isArray(res.data)) {
+          console.warn("res.data is not an array:", res.data);
+          return;
+        }
+
+        const chatIds = res.data.map((item) => item._id);
+        const userMessages = res.data.map((item) => item.userMessage);
+        const aspectRatios = res.data.map((item) => item.aspectRatio);
+        const voiceChoices = res.data.map((item) => item.voiceChoice);
+        const fileNames = res.data.map((item) => item.fileName);
+        const videoStyles = res.data.map((item) => item.videoStyle);
+        const scriptTypes = res.data.map((item) => item.scriptType);
+        const completedLabels = res.data
+          .map((item) => item.completedLabel)
+          .filter((label) => label);
+        const createdAts = res.data.map((item) => item.createdAt);
+        const videoUrls = res.data.map((item) => item.videoUrl);
+
+        console.log({
+          chatIds,
+          userMessages,
+          aspectRatios,
+          voiceChoices,
+          fileNames,
+          videoStyles,
+          scriptTypes,
+          completedLabels,
+          createdAts,
+          videoUrls,
+        });
+
+        setChatIds(chatIds);
+        setVideoList(completedLabels);
+        setVideoUrl(videoUrls);
+        setUserMessage(userMessages);
+        console.log("user messages", userMessages, "MESSAGES", messages);
+        handleNewVideo();
+      } catch (err) {
+        console.error("Error fetching labels", err);
+        handleNewVideo();
+      }
+    };
+
+    fetchLabels();
+  }, [userId]);
+
   return (
     <div className="promt-to-video">
       <Sidebar
@@ -491,6 +555,7 @@ export default function PromptToVideo() {
         isVideoReady={isVideoReady}
         userId={userId}
         setVideoList={setVideoList}
+        setChatIds={setChatIds}
       />
       <div className="main">
         <div className="chats" ref={chatEnd}>
