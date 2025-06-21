@@ -15,23 +15,14 @@ export default function Services() {
           <div className="services-description">
             <h3>
               🎬 Create Videos Instantly – Just enter a prompt, and AI does the
-              rest!
+              rest! Or, if you want, you can come with your script.
             </h3>
             <h3>
               📱 Choose Your Format – Landscape (16:9) or Portrait (9:16) for
               Shorts & Reels.
             </h3>{" "}
             🎙 AI-Powered Voiceovers & Scripts – No need to record anything!
-            <h3>
-              🖼 Smart Visuals – Auto-fetch images, GIFs & background music.
-            </h3>{" "}
-            <h3>
-              ✂️ Edit & Customize – Swap visuals, tweak scripts, and regenerate.
-            </h3>{" "}
-            <h3>
-              📢 One-Click Upload – Directly post to YouTube, with AI-generated
-              titles & tags!
-            </h3>
+            <h3>🖼 Smart Visuals – Auto-fetch images, GIFs.</h3>{" "}
             <h3>🔥 Effortless content creation, automated for you.</h3>
           </div>
           <h2 className="try-autovid">Try AutoVid today!</h2>

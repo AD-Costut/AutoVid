@@ -17,9 +17,7 @@ export default function About() {
             <h3>
               AutoVid is a web app that automates video creation from text
               prompts. Users can generate videos in landscape or portrait mode,
-              with AI-generated scripts, voiceovers, and visuals. The platform
-              allows editing, thumbnail generation, and direct YouTube uploads
-              with scheduled posting.
+              with AI-generated scripts, voiceovers, and visuals.
             </h3>
             <div className="empty-line"></div>
             <h3 className="end-text">
