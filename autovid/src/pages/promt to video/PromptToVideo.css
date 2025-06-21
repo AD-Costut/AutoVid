@@ -69,7 +69,7 @@ body {
   color: white;
   padding: 1.5rem;
   font-size: 2rem;
-  width: 25rem;
+  width: 27.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -83,7 +83,7 @@ body {
   background: transparent;
   color: rgba(222, 222, 222, 1);
   padding: 1.5rem;
-  width: 25rem;
+  width: 27.5rem;
   margin: 0.5rem;
   margin-left: 0rem;
   border-radius: 0.5rem;
@@ -92,7 +92,7 @@ body {
 }
 
 .query > img {
-  margin-right: 2rem;
+  margin-right: 0.75rem;
   object-fit: cover;
   height: 1.75rem;
 }

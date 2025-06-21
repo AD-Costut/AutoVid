@@ -117,8 +117,8 @@ export default function PromptToVideo() {
     const dateTimeStr = `${dateStr} ${timeStr}`;
 
     let snippet = input;
-    if (snippet.length > 10) {
-      snippet = snippet.substring(0, 10) + "...";
+    if (snippet.length > 9) {
+      snippet = snippet.substring(0, 9) + "...";
     }
 
     const completedLabel = `${snippet} (${dateTimeStr})`;
@@ -158,7 +158,7 @@ export default function PromptToVideo() {
       let finalPrompt = "";
 
       if (selectedVideoType === "Quiz") {
-        finalPrompt = `Make 5 questions quiz script about: "${input}".
+        finalPrompt = `Make 3 questions multiple choice quiz script about: "${input}".
 
         Start with a clear title for the quiz enclosed in && markers, like this:
         &&[Title]&&
@@ -168,7 +168,7 @@ export default function PromptToVideo() {
         The quiz script should start with something like:
         Welcome to today's quiz about the topic.
         
-        Then write exactly 5 questions and answers in this format:
+        Then write exactly 3 questions and answers in this format:
         ##
         [1. Short Question 1 text]  
         [A. ]  
@@ -184,7 +184,7 @@ export default function PromptToVideo() {
         
         ...  
         
-        [5. Short Question 5 text]  
+        [3. Short Question 5 text]  
         [A. ]  
         [B. ]  
         [C. ]  
