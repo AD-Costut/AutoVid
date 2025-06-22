@@ -640,8 +640,7 @@ export default function PromptToVideo() {
                 <div>
                   {typeof message.text === "string" ? (
                     <p className="txt">{message.text}</p>
-                  ) : message.isVideoLoading ||
-                    (message.text && !message.text.videoUrl) ? (
+                  ) : message.isVideoLoading ? (
                     <LoadingMessages />
                   ) : message.text && message.text.videoUrl ? (
                     <video
@@ -659,7 +658,11 @@ export default function PromptToVideo() {
                       onError={() => setIsVideoReady(false)}
                     />
                   ) : (
-                    <p className="txt">Unsupported message format</p>
+                    <p className="txt">
+                      {/* {message.text.error
+                        ? message.text.error
+                        : "Hi! What kind of video can I help you create today?"} */}
+                    </p>
                   )}
 
                   {message.isBot && i === 0 && (
