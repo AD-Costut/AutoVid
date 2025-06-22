@@ -14,6 +14,7 @@ const Sidebar = ({
   setChatLabel,
   setChatIds,
   handleLabelClick,
+  handleDeleteLabel,
 }) => {
   return (
     <div className="sideBar">
@@ -41,14 +42,29 @@ const Sidebar = ({
         </button>
         <div className="upperSideButton">
           {videoList.map((label, index) => (
-            <button
-              key={index}
-              className="query"
-              onClick={() => handleLabelClick(label, index)}
-            >
-              <img src={messageIcon} alt="Query" />
-              {label}
-            </button>
+            <div key={index} className="label-item">
+              <button
+                className="query"
+                onClick={() => handleLabelClick(label, index)}
+              >
+                <div className="query-left">
+                  <img src={messageIcon} alt="Query" />
+                  <span className="query-text">{label}</span>
+                </div>
+
+                {label !== "Untitled" && (
+                  <span
+                    className="delete-icon"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeleteLabel(index);
+                    }}
+                  >
+                    🗑️
+                  </span>
+                )}
+              </button>
+            </div>
           ))}
         </div>
       </div>

@@ -118,9 +118,14 @@ export default function PromptToVideo() {
     });
     const dateTimeStr = `${dateStr} ${timeStr}`;
 
-    let snippet = input;
-    if (snippet.length > 9) {
-      snippet = snippet.substring(0, 9) + "...";
+    let snippet = input.trim();
+
+    if (snippet === snippet.toUpperCase()) {
+      snippet =
+        snippet.charAt(0).toUpperCase() + snippet.slice(1).toLowerCase();
+    }
+    if (snippet.length > 8) {
+      snippet = snippet.substring(0, 8) + "...";
     }
 
     const completedLabel = `${snippet} (${dateTimeStr})`;
@@ -567,6 +572,54 @@ export default function PromptToVideo() {
     setMessages(newMessages);
   };
 
+  const handleDeleteLabel = async (index) => {
+    if (index >= chatIds.length) {
+      console.warn("Index out of range", index);
+      return;
+    }
+
+    const chatIdToDelete = chatIds[index];
+    if (!chatIdToDelete) {
+      console.error("No chatId found at index", index);
+      return;
+    }
+    console.log("Deleting chatId at index:", index, chatIdToDelete);
+
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this label?"
+    );
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      await axios.delete(
+        `http://localhost:5000/api/chatHistory/${chatIdToDelete}`
+      );
+
+      const newChatIds = [...chatIds];
+      const newVideoList = [...videoList];
+      const newVideoUrl = [...videoUrl];
+      const newUserMessages = [...userMessages];
+
+      newChatIds.splice(index, 1);
+      newVideoList.splice(index, 1);
+      newVideoUrl.splice(index, 1);
+      newUserMessages.splice(index, 1);
+
+      setChatIds(newChatIds);
+      console.log("chatIds after delete:", newChatIds);
+
+      setVideoList(newVideoList);
+      setVideoUrl(newVideoUrl);
+      setUserMessages(newUserMessages);
+
+      console.log("Deleted video label successfully.");
+    } catch (err) {
+      console.error("Failed to delete label:", err);
+    }
+  };
+
   return (
     <div className="promt-to-video">
       <Sidebar
@@ -581,6 +634,7 @@ export default function PromptToVideo() {
         setVideoList={setVideoList}
         setChatIds={setChatIds}
         handleLabelClick={handleLabelClick}
+        handleDeleteLabel={handleDeleteLabel}
       />
       <div className="main">
         <div className="chats" ref={chatEnd}>
