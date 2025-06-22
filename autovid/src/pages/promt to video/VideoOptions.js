@@ -18,7 +18,7 @@ const VideoOptions = ({
   playIcon,
   backgroundPresets,
   aspectRatio,
-  setaspectRatio,
+  setAspectRatio,
   voiceChoice,
   setVoiceChoice,
   isLandscape,
@@ -144,7 +144,7 @@ const VideoOptions = ({
               name="aspectRatio"
               value="16:9"
               checked={aspectRatio === "16:9"}
-              onChange={(e) => setaspectRatio(e.target.value)}
+              onChange={(e) => setAspectRatio(e.target.value)}
               disabled={optionsDisabled}
             />
             16:9
@@ -155,7 +155,7 @@ const VideoOptions = ({
               name="aspectRatio"
               value="9:16"
               checked={aspectRatio === "9:16"}
-              onChange={(e) => setaspectRatio(e.target.value)}
+              onChange={(e) => setAspectRatio(e.target.value)}
               disabled={optionsDisabled}
             />
             9:16 (Shorts)

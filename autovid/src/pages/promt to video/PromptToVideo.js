@@ -52,7 +52,7 @@ export default function PromptToVideo() {
   const [isPreset, setIsPreset] = useState(true);
   const [selectedBackground, setSelectedBackground] = useState(null);
   const [userMessages, setUserMessages] = useState([]);
-  const [aspectRatio, setaspectRatio] = useState("16:9");
+  const [aspectRatio, setAspectRatio] = useState("16:9");
   const [voiceChoice, setVoiceChoice] = useState(Object.keys(googleVoices)[0]);
   const [isLandscape, setIsLandscape] = useState(true);
 
@@ -431,16 +431,19 @@ export default function PromptToVideo() {
     setIsVideoReady(false);
 
     setVideoList((prevList) => {
-      if (prevList.length === 0) {
-        return [`Untitled`];
+      if (prevList.length === 0 || !prevList[0].startsWith("Untitled")) {
+        return ["Untitled", ...prevList];
       }
-
-      if (prevList[0].startsWith("Untitled")) {
-        return prevList;
-      }
-
-      return [`Untitled`, ...prevList];
+      return prevList;
     });
+
+    setChatIds((prevIds) => {
+      const newId = `temp-${Date.now()}`;
+      return [newId, ...prevIds];
+    });
+
+    setVideoUrl((prev) => [null, ...prev]);
+    setUserMessages((prev) => [null, ...prev]);
   };
 
   useEffect(() => {
@@ -573,48 +576,31 @@ export default function PromptToVideo() {
   };
 
   const handleDeleteLabel = async (index) => {
-    if (index >= chatIds.length) {
-      console.warn("Index out of range", index);
+    if (chatIds.length === 1) {
+      alert("Cannot delete the last remaining chat.");
       return;
     }
 
     const chatIdToDelete = chatIds[index];
-    if (!chatIdToDelete) {
-      console.error("No chatId found at index", index);
-      return;
-    }
-    console.log("Deleting chatId at index:", index, chatIdToDelete);
+    if (!chatIdToDelete) return;
 
     const confirmed = window.confirm(
       "Are you sure you want to delete this label?"
     );
-    if (!confirmed) {
-      return;
-    }
+    if (!confirmed) return;
 
     try {
-      await axios.delete(
-        `http://localhost:5000/api/chatHistory/${chatIdToDelete}`
-      );
+      if (!chatIdToDelete.startsWith("temp-")) {
+        await axios.delete(
+          `http://localhost:5000/api/chatHistory/${chatIdToDelete}`
+        );
+      }
 
-      const newChatIds = [...chatIds];
-      const newVideoList = [...videoList];
-      const newVideoUrl = [...videoUrl];
-      const newUserMessages = [...userMessages];
-
-      newChatIds.splice(index, 1);
-      newVideoList.splice(index, 1);
-      newVideoUrl.splice(index, 1);
-      newUserMessages.splice(index, 1);
-
-      setChatIds(newChatIds);
-      console.log("chatIds after delete:", newChatIds);
-
-      setVideoList(newVideoList);
-      setVideoUrl(newVideoUrl);
-      setUserMessages(newUserMessages);
-
-      console.log("Deleted video label successfully.");
+      setChatIds((prev) => prev.filter((_, i) => i !== index));
+      setVideoList((prev) => prev.filter((_, i) => i !== index));
+      setVideoUrl((prev) => prev.filter((_, i) => i !== index));
+      setUserMessages((prev) => prev.filter((_, i) => i !== index));
+      // setAspectRatio((prev) => prev.filter((_, i) => i !== index));
     } catch (err) {
       console.error("Failed to delete label:", err);
     }
@@ -698,7 +684,7 @@ export default function PromptToVideo() {
                       aspectRatio={aspectRatio}
                       voiceChoice={voiceChoice}
                       setVoiceChoice={setVoiceChoice}
-                      setaspectRatio={setaspectRatio}
+                      setAspectRatio={setAspectRatio}
                       isLandscape={isLandscape}
                     />
                   )}
