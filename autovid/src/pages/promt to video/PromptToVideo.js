@@ -37,7 +37,7 @@ export default function PromptToVideo() {
   const [videoUrl, setVideoUrl] = useState([]);
   const [optionsDisabled, setOptionsDisabled] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
-  const [ChatIds, setChatIds] = useState([]);
+  const [chatIds, setChatIds] = useState([]);
 
   const [scriptOptionsDisabled, setScriptOptionsDisabled] = useState(false);
 
@@ -51,7 +51,7 @@ export default function PromptToVideo() {
   const [uploadedFile, setUploadedFile] = useState(null);
   const [isPreset, setIsPreset] = useState(true);
   const [selectedBackground, setSelectedBackground] = useState(null);
-  const [userMessage, setUserMessage] = useState([]);
+  const [userMessages, setUserMessages] = useState([]);
   const [aspectRatio, setaspectRatio] = useState("16:9");
   const [voiceChoice, setVoiceChoice] = useState(Object.keys(googleVoices)[0]);
   const [isLandscape, setIsLandscape] = useState(true);
@@ -531,7 +531,7 @@ export default function PromptToVideo() {
         setChatIds(chatIds);
         setVideoList(completedLabels);
         setVideoUrl(videoUrls);
-        setUserMessage(userMessages);
+        setUserMessages(userMessages);
         console.log("user messages", userMessages, "MESSAGES", messages);
         handleNewVideo();
       } catch (err) {
@@ -542,6 +542,30 @@ export default function PromptToVideo() {
 
     fetchLabels();
   }, [userId]);
+
+  const handleLabelClick = (label, index) => {
+    if (label.toLowerCase() === "untitled") {
+      window.location.reload();
+      return;
+    }
+
+    const selectedChatId = chatIds[index];
+    const selectedMessage = userMessages[index];
+    const selectedVideoUrl = videoUrl[index];
+
+    const newMessages = [
+      {
+        isBot: false,
+        text: selectedMessage,
+      },
+      {
+        isBot: true,
+        text: { videoUrl: selectedVideoUrl },
+      },
+    ];
+
+    setMessages(newMessages);
+  };
 
   return (
     <div className="promt-to-video">
@@ -556,6 +580,7 @@ export default function PromptToVideo() {
         userId={userId}
         setVideoList={setVideoList}
         setChatIds={setChatIds}
+        handleLabelClick={handleLabelClick}
       />
       <div className="main">
         <div className="chats" ref={chatEnd}>

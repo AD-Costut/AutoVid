@@ -13,6 +13,7 @@ const Sidebar = ({
   userId,
   setChatLabel,
   setChatIds,
+  handleLabelClick,
 }) => {
   return (
     <div className="sideBar">
@@ -38,20 +39,12 @@ const Sidebar = ({
           <img src={addButton} alt="new video" className="addButton" />
           New Video
         </button>
-
         <div className="upperSideButton">
           {videoList.map((label, index) => (
             <button
               key={index}
               className="query"
-              onClick={() => {
-                if (label.toLowerCase() === "untitled") {
-                  // window.location.reload();
-                }
-                // if (label?.toLowerCase() === "untitled") {
-                //   window.location.reload();
-                // }
-              }}
+              onClick={() => handleLabelClick(label, index)}
             >
               <img src={messageIcon} alt="Query" />
               {label}
