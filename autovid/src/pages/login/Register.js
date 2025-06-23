@@ -44,8 +44,15 @@ const Register = () => {
       setEmailError("");
     }
 
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+
     if (registerPassword !== confirmPassword) {
       setPasswordError("❌ Passwords do not match.");
+      valid = false;
+    } else if (!passwordRegex.test(registerPassword)) {
+      setPasswordError(
+        "❌ Password must be at least 8 characters long and include uppercase, lowercase, number, and special character."
+      );
       valid = false;
     } else {
       setPasswordError("");
