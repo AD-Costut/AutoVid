@@ -38,7 +38,7 @@ export default function PromptToVideo() {
   const [optionsDisabled, setOptionsDisabled] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
   const [chatIds, setChatIds] = useState([]);
-
+  const [selectedIndex, setSelectedIndex] = useState(null);
   const [scriptOptionsDisabled, setScriptOptionsDisabled] = useState(false);
 
   const voiceSelectRef = useRef(null);
@@ -162,77 +162,13 @@ export default function PromptToVideo() {
     ]);
 
     if (selectedScriptType === "AI Script") {
-      let finalPrompt = "";
-
-      if (selectedVideoType === "Quiz") {
-        finalPrompt = `Make 3 questions multiple choice quiz script about: "${input}".
-
-        Start with a clear title for the quiz enclosed in && markers, like this:
-        &&[Title]&&
-        
-        Then write the entire quiz script inside a single pair of ## delimiters.
-        
-        The quiz script should start with something like:
-        Welcome to today's quiz about the topic.
-        
-        Then write exactly 3 questions and answers in this format:
-        ##
-        [1. Short Question 1 text]  
-        [A. ]  
-        [B. ]  
-        [C. ]  
-        Correct Answear [ .]  
-        
-        [2. Short Question 2 text]  
-        [A. ]  
-        [B. ]  
-        [C. ]  
-        Correct Answear [ .]  
-        
-        ...  
-        
-        [3. Short Question 5 text]  
-        [A. ]  
-        [B. ]  
-        [C. ]  
-        Correct Answear [ .]  
-        ##
-        4500 characters max
-        Do NOT include any narrator labels, parentheses, comments, or extra delimiters.`;
-      } else if (selectedVideoType === "Slide Show") {
-        finalPrompt = `Make a YouTube slideshow narration script about: "${input}" for a youtube video.
-  
-        Start with a clear title enclosed in && markers, like this:
-        &&[Title]&&
-        
-        Then write the entire narration script inside a single pair of ## delimiters.
-        
-        Write only the narration text to be spoken throughout the slideshow.
-        
-        Do NOT include slide notes, timestamps, multiple #%# delimiters, parentheses, or narrator labels.
-        
-        Example output format:
-        
-        ##
-        [Pure narration script here...]
-        ##
-        1500 characters max`;
-      } else if (selectedVideoType === "Reddit Story") {
-        finalPrompt = `Create a Reddit-style story script based on: "${input}" for a YouTube video.
-  
-        Start with a clear and engaging story title enclosed in && markers, like this:
-        &&[Story Title]&&
-        
-        Then write the entire story script inside a single pair of ## delimiters.
-        
-        Write the story as pure text, without any narrator labels, parentheses, stage directions, or commentary.
-        
-        Example output format:
-        
-        ##
-        [Story text here...]
-        ##
-        4500 characters max`;
+      let finalPrompt = input;
+      if (
+        selectedVideoType === "Quiz" ||
+        selectedVideoType === "Slide Show" ||
+        selectedVideoType === "Reddit Story"
+      ) {
+        finalPrompt = input;
       }
 
       const res = await sendMessageToAi(
@@ -248,7 +184,6 @@ export default function PromptToVideo() {
         console.error("AI response is undefined!");
         return;
       }
-
       setMessages((prev) => {
         const newMessages = [...prev];
         const loadingIndex = newMessages.findIndex((msg) => msg.isVideoLoading);
@@ -257,31 +192,6 @@ export default function PromptToVideo() {
         }
         return newMessages;
       });
-
-      // if (selectedScriptType === "AI Script") {
-      //   let finalPrompt = "";
-
-      //   if (selectedVideoType === "Quiz") {
-      //     finalPrompt = input;
-      //   } else if (selectedVideoType === "Slide Show") {
-      //     finalPrompt = input;
-      //   } else if (selectedVideoType === "Reddit Story") {
-      //     finalPrompt = input;
-      //   }
-
-      //   const res = await sendMessageToAi(
-      //     finalPrompt,
-      //     aspectRatio,
-      //     voiceChoice,
-      //     fileToSend,
-      //     selectedVideoType,
-      //     selectedScriptType
-      //   );
-      //   if (!res) {
-      //     console.error("AI response is undefined!");
-      //     return;
-      //   }
-      //   setMessages((prev) => [...prev, { text: res, isBot: true }]);
     } else if (selectedScriptType === "User Script") {
       const res = await sendMessageToAi(
         input,
@@ -552,16 +462,31 @@ export default function PromptToVideo() {
   }, [userId]);
 
   const handleLabelClick = (label, index) => {
+    setSelectedIndex(index);
+
     if (label.toLowerCase() === "untitled") {
-      window.location.reload();
+      setMessages([
+        {
+          isBot: true,
+          text: {},
+          isVideoLoading: false,
+        },
+      ]);
+
+      chatEnd.current?.scrollIntoView({ behavior: "smooth" });
+
       return;
     }
 
-    const selectedChatId = chatIds[index];
     const selectedMessage = userMessages[index];
     const selectedVideoUrl = videoUrl[index];
 
-    const newMessages = [
+    setMessages([
+      // {
+      //   isBot: true,
+      //   text: {},
+      //   isVideoLoading: false,
+      // },
       {
         isBot: false,
         text: selectedMessage,
@@ -569,10 +494,9 @@ export default function PromptToVideo() {
       {
         isBot: true,
         text: { videoUrl: selectedVideoUrl },
+        isVideoLoading: false,
       },
-    ];
-
-    setMessages(newMessages);
+    ]);
   };
 
   const handleDeleteLabel = async (index) => {
