@@ -613,6 +613,7 @@ export default function PromptToVideo() {
                       setVoiceChoice={setVoiceChoice}
                       setAspectRatio={setAspectRatio}
                       isLandscape={isLandscape}
+                      hasProfanity={hasProfanity}
                     />
                   )}
                 </div>

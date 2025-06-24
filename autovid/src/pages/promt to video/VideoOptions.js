@@ -22,6 +22,7 @@ const VideoOptions = ({
   voiceChoice,
   setVoiceChoice,
   isLandscape,
+  hasProfanity,
 }) => {
   return (
     <div className="videoOptions">
@@ -180,7 +181,7 @@ const VideoOptions = ({
         <button
           className="listen"
           ref={listenButtonRef}
-          disabled={optionsDisabled || !input.trim()}
+          disabled={optionsDisabled || hasProfanity || !input.trim()}
         >
           <img src={playIcon} alt="" />
           Listen
