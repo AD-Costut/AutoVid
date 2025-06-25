@@ -500,11 +500,6 @@ export default function PromptToVideo() {
   };
 
   const handleDeleteLabel = async (index) => {
-    if (chatIds.length === 1) {
-      alert("Cannot delete the last remaining chat.");
-      return;
-    }
-
     const chatIdToDelete = chatIds[index];
     if (!chatIdToDelete) return;
 

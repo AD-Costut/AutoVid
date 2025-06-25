@@ -45,18 +45,21 @@ const Register = () => {
     }
 
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+    const passwordErrors = [];
 
     if (registerPassword !== confirmPassword) {
-      setPasswordError("❌ Passwords do not match.");
+      passwordErrors.push("❌ Passwords do not match.");
       valid = false;
-    } else if (!passwordRegex.test(registerPassword)) {
-      setPasswordError(
+    }
+
+    if (!passwordRegex.test(registerPassword)) {
+      passwordErrors.push(
         "❌ Password must be at least 8 characters long and include uppercase, lowercase, number, and special character."
       );
       valid = false;
-    } else {
-      setPasswordError("");
     }
+
+    setPasswordError(passwordErrors.join(" "));
 
     if (!valid) return;
 
