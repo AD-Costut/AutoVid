@@ -34,6 +34,9 @@ const Register = () => {
   };
 
   const handleClick = () => {
+    setEmailError("");
+    setPasswordError("");
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     let valid = true;
 
@@ -106,8 +109,12 @@ const Register = () => {
       .catch((error) => {
         setOneClickOnSubmit(false);
         console.error("Fetch error:", error.message);
-        setEmailError("");
-        setPasswordError(error.message);
+        if (error.message === "Failed to fetch") {
+          setEmailError("❌ Cannot connect to server. Please try again later.");
+        } else {
+          setEmailError("");
+          setPasswordError(error.message);
+        }
       });
   };
 
