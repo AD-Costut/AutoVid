@@ -21,6 +21,7 @@ const Login = () => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [showPassword, setShowPassword] = React.useState(false);
+  const [googleLoginError, setGoogleLoginError] = useState("");
 
   const handleToggleShowPassword = () => {
     setShowPassword((prev) => !prev);
@@ -45,6 +46,10 @@ const Login = () => {
   const login = useGoogleLogin({
     clientId,
     onSuccess: async (tokenResponse) => {
+      setGoogleLoginError("");
+      setEmailError("");
+      setPasswordError("");
+
       try {
         const userInfoResponse = await fetch(
           "https://www.googleapis.com/oauth2/v3/userinfo",
@@ -83,21 +88,24 @@ const Login = () => {
           navigate("/promt-to-video");
         } else {
           console.error("Backend login failed:", result.error);
-          alert("Backend login failed: " + result.error);
+          setGoogleLoginError("❌ Backend login failed: " + result.error);
         }
       } catch (error) {
         console.error("Failed to fetch user data or login backend:", error);
+        setGoogleLoginError("❌ Google login failed. Please try again.");
       }
     },
 
     onError: (error) => {
       console.error("Google Login Error:", error);
+      setGoogleLoginError("❌ Google login was unsuccessful.");
     },
   });
 
   const handleLogInSubmit = () => {
     setEmailError("");
     setPasswordError("");
+    setGoogleLoginError("");
 
     let emailMissing = !logInEmail;
     let passwordMissing = !logInPassword;
@@ -185,6 +193,18 @@ const Login = () => {
               <img src={google_icon} alt="Google Icon" />
               <span className="google-text">Login with Google</span>
             </button>
+            {googleLoginError && (
+              <div
+                style={{
+                  color: "red",
+                  fontSize: "1.2vw",
+                  textAlign: "center",
+                  marginBottom: "0.5vw",
+                }}
+              >
+                {googleLoginError}
+              </div>
+            )}
           </div>
 
           <h2 className="or">Or</h2>
