@@ -473,8 +473,6 @@ export default function PromptToVideo() {
         },
       ]);
 
-      chatEnd.current?.scrollIntoView({ behavior: "smooth" });
-
       return;
     }
 
