@@ -4,7 +4,7 @@ const ChatFooter = ({
   handleEnter,
   setInput,
   INPUT_CHAR_LIMIT,
-  aiResponseDone,
+  messageToSend,
   selectedScriptType,
   handleSend,
   selectedOption,
@@ -29,7 +29,7 @@ const ChatFooter = ({
           onKeyDown={handleEnter}
           onChange={(e) => setInput(e.target.value)}
           maxLength={INPUT_CHAR_LIMIT}
-          disabled={aiResponseDone}
+          disabled={messageToSend}
         />
 
         {selectedScriptType && input.length > 0 && (
@@ -58,7 +58,7 @@ const ChatFooter = ({
             !voiceSelectRef.current?.value ||
             input.length > INPUT_CHAR_LIMIT ||
             !input.trim() ||
-            aiResponseDone ||
+            messageToSend ||
             isLoading ||
             hasProfanity ||
             (selectedScriptType === "Slide Show" &&

@@ -45,7 +45,7 @@ export default function PromptToVideo() {
   const listenButtonRef = useRef(null);
   const textareaRef = useRef(null);
 
-  const [aiResponseDone, setAiResponseDone] = useState(false);
+  const [messageToSend, setMessageToSend] = useState(false);
 
   const [background, setBackground] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(null);
@@ -218,7 +218,7 @@ export default function PromptToVideo() {
     }
 
     setOptionsDisabled(true);
-    setAiResponseDone(true);
+    setMessageToSend(true);
     setInput("");
     setIsLoading(false);
   };
@@ -321,7 +321,7 @@ export default function PromptToVideo() {
         !voiceSelectRef.current?.value ||
         input.length > INPUT_CHAR_LIMIT ||
         !input.trim() ||
-        aiResponseDone
+        messageToSend
       ) {
         return;
       }
@@ -619,7 +619,7 @@ export default function PromptToVideo() {
           handleEnter={handleEnter}
           setInput={setInput}
           INPUT_CHAR_LIMIT={INPUT_CHAR_LIMIT}
-          aiResponseDone={aiResponseDone}
+          messageToSend={messageToSend}
           selectedScriptType={selectedScriptType}
           handleSend={handleSend}
           selectedOption={selectedOption}
