@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import Navbar from "./navbar/Navbar";
+import Navbar from "./navigation-bar/Navbar";
 import ContactUs from "./pages/contact us/ContactUs";
 import About from "./pages/about/About";
 import Login from "./pages//login/Login";
