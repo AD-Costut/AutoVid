@@ -52,18 +52,20 @@ const Sidebar = ({
                   <span className="query-text">{label}</span>
                 </div>
 
-                {videoList.length > 1 && label !== "Untitled" && (
-                  <span
-                    className="delete-icon"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDeleteLabel(index);
-                      window.location.reload();
-                    }}
-                  >
-                    🗑️
-                  </span>
-                )}
+                {videoList.length > 1 &&
+                  label !== "Untitled" &&
+                  index !== 0 && (
+                    <span
+                      className="delete-icon"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteLabel(index);
+                        window.location.reload();
+                      }}
+                    >
+                      🗑️
+                    </span>
+                  )}
               </button>
             </div>
           ))}
